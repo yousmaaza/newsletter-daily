@@ -1,0 +1,157 @@
+name: Daily Newsletter
+
+on:
+  schedule:
+    # Heures UTC. En été (CEST = UTC+2), 06:07 UTC = 08:07 à Paris.
+    # En hiver (CET = UTC+1), la même ligne donne 07:07 — passer à "07 7 * * *".
+    #
+    # Jamais à l'heure pile : le planificateur GitHub fonctionne « au mieux »
+    # et le créneau :00 est le plus disputé. Les 27 et 28 août 2026, un cron
+    # à "0 5 * * *" s'est réveillé onze puis douze heures plus tard.
+    - cron: "07 6 * * *"
+  # La relance de secours n'est PAS un second cron : elle dépendrait du même
+  # planificateur, et serait retardée de la même façon. Elle vit dans
+  # auth_server/send_watchdog.py, hébergé ailleurs et allumé en continu — d'où
+  # la nécessité de garder workflow_dispatch ci-dessous.
+  workflow_dispatch:
+
+jobs:
+  send-newsletter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write  # commit du dashboard et des identifiants de mesure
+      actions: read    # lecture de l'historique des runs pour le dashboard
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore Gmail credentials
+        run: |
+          mkdir -p ~/.gmail-mcp
+          echo '${{ secrets.GMAIL_CREDENTIALS_JSON }}' > ~/.gmail-mcp/credentials.json
+          echo '${{ secrets.GMAIL_TOKEN_JSON }}'       > ~/.gmail-mcp/token.json
+
+      - name: Récupérer les données d'abonnés
+        env:
+          DATA_REPO: ${{ secrets.DATA_REPO }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+        run: |
+          # Les listes d'abonnés vivent dans un dépôt privé dédié (#55).
+          # Cette étape échoue bruyamment si elles sont injoignables : mieux
+          # vaut pas d'édition qu'une édition envoyée à une liste tronquée.
+          python scripts/fetch_subscriber_data.py
+
+      # Un run planifié peut se réveiller des heures après l'événement qui l'a
+      # déclenché, donc sur un SHA devenu ancien. Le journal d'envoi doit être
+      # relu sur main au dernier moment : sinon le garde-fou anti-doublon
+      # raisonnerait sur un fichier périmé et renverrait l'édition du jour.
+      - name: Rafraîchir le journal d'envoi
+        run: |
+          git fetch --quiet origin main
+          git checkout origin/main -- data/sent_editions.csv 2>/dev/null \
+            && echo "journal relu depuis main" \
+            || echo "aucun journal sur main — première édition"
+
+      # Envoi de la newsletter — chemin unique, cron comme déclenchement manuel.
+      # Il n'y a plus qu'une seule étape d'envoi, donc plus qu'un seul bloc env :
+      # une variable ajoutée ici vaut pour TOUS les envois. C'est ce qui manquait
+      # quand les modes GMAIL-ONLY et INSTA-PUBLISH coexistaient : les trois
+      # variables du bloc transparence n'étaient câblées que dans le second, et
+      # un envoi manuel partait sans le bloc, sans erreur ni log.
+      - name: Send newsletter
+        env:
+          ANTHROPIC_API_KEY:      ${{ secrets.ANTHROPIC_API_KEY }}
+          BRAVE_API_KEY:          ${{ secrets.BRAVE_API_KEY }}
+          GMAIL_FROM:             ${{ secrets.GMAIL_FROM }}
+          # GMAIL_TO : fallback si config/recipients.toml est vide (sync Google Form)
+          GMAIL_TO:               ${{ secrets.GMAIL_TO }}
+          FROM_NAME:              "Daily News Agent"
+          GMAIL_CREDENTIALS_PATH: "~/.gmail-mcp/credentials.json"
+          GMAIL_TOKEN_PATH:       "~/.gmail-mcp/token.json"
+          GMAIL_APP_PASSWORD:     ${{ secrets.GMAIL_APP_PASSWORD }}
+          AUTH_SERVER_URL:        ${{ secrets.AUTH_SERVER_URL }}
+          FEEDBACK_FORM_URL:      ${{ secrets.FEEDBACK_FORM_URL }}
+          UNSUBSCRIBE_SECRET:     ${{ secrets.UNSUBSCRIBE_SECRET }}
+          # Bloc transparence. Les deux URL sont dérivées d'AUTH_SERVER_URL :
+          # même serveur, donc aucun secret à ajouter et aucune dérive possible.
+          # SHOW_TRACKING_NOTICE est une VARIABLE de dépôt (Settings → Variables),
+          # pas un secret : l'activation du bloc reste un geste délibéré et
+          # réversible depuis l'interface GitHub, sans toucher au code.
+          SHOW_TRACKING_NOTICE:   ${{ vars.SHOW_TRACKING_NOTICE }}
+          DASHBOARD_PUBLIC_URL:   ${{ secrets.AUTH_SERVER_URL }}/board
+          PRIVACY_URL:            ${{ secrets.AUTH_SERVER_URL }}/vie-privee
+          # GITHUB_TOKEN, le jeton automatique, est limité au dépôt courant
+          # par conception : il ne peut pas lire le dépôt de données.
+          GIT_TOKEN:              ${{ secrets.GIT_TOKEN }}
+          DATA_REPO:              ${{ secrets.DATA_REPO }}
+          GITHUB_REPO:            ${{ github.repository }}
+        run: python main.py --now
+
+      - name: Renvoyer la table d'identifiants
+        if: always()
+        env:
+          DATA_REPO: ${{ secrets.DATA_REPO }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+        run: |
+          # Un nouvel abonné a reçu son identifiant pendant l'envoi, dans ce
+          # runner éphémère. Sans ce renvoi il serait perdu, et la personne en
+          # recevrait un autre demain — historique fragmenté en silence.
+          python scripts/push_subscriber_ids.py
+
+      # Le dashboard d'engagement (auth_server /dashboard) lit cet agrégat pour
+      # tout l'historique ; seuls les chiffres du jour sont relus en direct.
+      - name: Rebuild dashboard data
+        if: always()
+        env:
+          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          # agent.py écrit output/newsletter/<date>/data.json en local ET pousse
+          # une version allégée (rank + title) via l'API GitHub. Le chemin est
+          # suivi par git : dès qu'un second envoi a lieu le même jour, les deux
+          # versions divergent, --autostash n'arrive pas à repositionner la copie
+          # locale et laisse des marqueurs de conflit DANS le fichier — que le
+          # rebuild lit ensuite comme du JSON, et sur lesquels il plante.
+          # La copie distante fait autorité, la copie locale est jetable : on
+          # l'écarte avant le pull. --autostash reste par prudence, la copie
+          # locale pouvant avoir bougé pendant l'envoi.
+          git checkout -- output/newsletter 2>/dev/null || true
+          git pull --rebase --autostash || true
+          python scripts/build_dashboard_data.py
+
+      - name: Commit dashboard data
+        if: always()
+        run: |
+          # Aucune étape amont ne configure git : cette étape le fait pour
+          # elle-même, et tourne en if: always() même si l'envoi a échoué.
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+          # La table d'identifiants ne se commite plus ici : elle part vers le
+          # dépôt de données par l'étape « Renvoyer la table » (#55), et elle
+          # est gitignorée dans ce dépôt.
+          # Le journal part avec le dashboard : sans lui, la relance de 8h07
+          # ne saurait pas que l'édition est déjà partie.
+          TRACKED="data/dashboard.json data/sent_editions.csv"
+          if git diff --quiet -- $TRACKED; then
+            echo "dashboard inchangé"
+            exit 0
+          fi
+          git add $TRACKED
+          git commit -m "data: dashboard [$(date -u +%Y-%m-%d)] [skip ci]"
+          git push

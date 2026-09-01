@@ -1,0 +1,6 @@
+[build]
+builder = "nixpacks"
+buildCommand = "pip install -r auth_server/requirements.txt"
+
+[deploy]
+startCommand = "cd auth_server && gunicorn app:app"

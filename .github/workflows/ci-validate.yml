@@ -1,0 +1,104 @@
+name: CI — Validate Newsletter
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - "feature/**"
+      - "fix/**"
+  # Déclenchement manuel, avec le choix de la source du contenu.
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Contenu de l'édition de validation"
+        required: true
+        default: "reference"
+        type: choice
+        options:
+          # Rend l'édition de référence versionnée : aucun appel Anthropic ni
+          # Brave. Suffit à valider un template, le bloc transparence, les
+          # liens, la mise en forme — soit la grande majorité des changements.
+          - reference
+          # Lance la génération complète. Consomme des crédits Anthropic et
+          # du quota Brave : à réserver aux changements qui touchent la
+          # sélection ou la rédaction des articles.
+          - generation
+
+jobs:
+  validate-newsletter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore Gmail credentials
+        run: |
+          mkdir -p ~/.gmail-mcp
+          echo '${{ secrets.GMAIL_CREDENTIALS_JSON }}' > ~/.gmail-mcp/credentials.json
+          echo '${{ secrets.GMAIL_TOKEN_JSON }}'       > ~/.gmail-mcp/token.json
+
+      - name: Récupérer les données d'abonnés
+        env:
+          DATA_REPO: ${{ secrets.DATA_REPO }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+        run: python scripts/fetch_subscriber_data.py
+
+      - name: Override recipients — test email only
+        run: |
+          cat > config/recipients.toml << 'EOF'
+          # Overridden by CI — test recipient only
+          [recipients]
+          emails = ["${{ secrets.CI_TEST_EMAIL }}"]
+          EOF
+
+      - name: Run newsletter pipeline (validation)
+        env:
+          ANTHROPIC_API_KEY:      ${{ secrets.ANTHROPIC_API_KEY }}
+          BRAVE_API_KEY:          ${{ secrets.BRAVE_API_KEY }}
+          GMAIL_FROM:             ${{ secrets.GMAIL_FROM }}
+          GMAIL_TO:               ${{ secrets.CI_TEST_EMAIL }}
+          FROM_NAME:              "Daily News Agent [CI]"
+          GMAIL_CREDENTIALS_PATH: "~/.gmail-mcp/credentials.json"
+          GMAIL_TOKEN_PATH:       "~/.gmail-mcp/token.json"
+          GMAIL_APP_PASSWORD:     ${{ secrets.GMAIL_APP_PASSWORD }}
+          AUTH_SERVER_URL:        ${{ secrets.AUTH_SERVER_URL }}
+          FEEDBACK_FORM_URL:      ${{ secrets.FEEDBACK_FORM_URL }}
+          UNSUBSCRIBE_SECRET:     ${{ secrets.UNSUBSCRIBE_SECRET }}
+          # Bloc transparence. Les deux URL sont dérivées d'AUTH_SERVER_URL :
+          # même serveur, donc aucun secret à ajouter et aucune dérive possible.
+          # SHOW_TRACKING_NOTICE est une VARIABLE de dépôt (Settings → Variables),
+          # pas un secret : l'activation du bloc reste un geste délibéré et
+          # réversible depuis l'interface GitHub, sans toucher au code.
+          SHOW_TRACKING_NOTICE:    ${{ vars.SHOW_TRACKING_NOTICE }}
+          DASHBOARD_PUBLIC_URL:    ${{ secrets.AUTH_SERVER_URL }}/board
+          PRIVACY_URL:             ${{ secrets.AUTH_SERVER_URL }}/vie-privee
+          GIT_TOKEN:              ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO:            ${{ github.repository }}
+        run: |
+          # Un push ou une PR valide le rendu, sans coût. La génération n'est
+          # lancée que sur demande explicite.
+          if [ "${{ inputs.source }}" = "generation" ]; then
+            echo "Génération complète — consomme des crédits Anthropic et Brave"
+            python main.py --now
+          else
+            echo "Édition de référence — aucun appel aux API de contenu"
+            python main.py --send-test "${{ secrets.CI_TEST_EMAIL }}" \
+              --data-file tests/fixtures/newsletter_sample.json --with-notice
+          fi

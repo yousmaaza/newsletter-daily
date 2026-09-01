@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flash Info — la newsletter quotidienne de 8 h</title>
+<meta name="description" content="Chaque matin à 8 h, dix sujets d'actualité lus, triés et résumés. Une lettre qui affiche ce qu'elle mesure et laisse refuser d'un clic.">
+<link rel="canonical" href="/inscription">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Flash Info — la newsletter quotidienne de 8 h">
+<meta property="og:description" content="Dix sujets d'actualité lus, triés et résumés, chaque matin à 8 h.">
+<meta name="theme-color" content="#1c1917">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+
+<!--
+  Formulaire cible : « Inscription Daily News »
+    action  → https://docs.google.com/forms/d/e/1FAIpQLSc8kXoEQC9rCAI_v08am9nYKpq4FjeHqVKqmJNlN9BWuJzy4A/formResponse
+    email   → entry.259733735
+
+  L'identifiant est celui des RÉPONSES (/forms/d/e/…), pas celui de l'édition
+  (/forms/d/<autre-id>/edit) : ce dernier donne un 404, que l'iframe avalerait
+  sans rien dire.
+
+  Le champ piège (name="site") n'a rien à configurer : il est bloqué en
+  JavaScript avant l'envoi, il n'atteint jamais Google.
+
+  Si un jour ces valeurs redeviennent des placeholders, la route /inscription
+  répond 503 plutôt que de servir une page qui avalerait les inscriptions en
+  silence. Voir auth_server/app.py::landing_page.
+-->
+</head>
+<body>
+<style>
+  /* ═══════════════════════════════════════════════════════════════
+     Palette reprise telle quelle de newsletter_template.html.
+     Georgia et Arial sont les polices de l'email : l'aperçu plus bas
+     les utilise pour être fidèle à ce qui part vraiment.
+     ═══════════════════════════════════════════════════════════════ */
+  :root {
+    --sand:      #ede8df;
+    --paper:     #faf7f2;
+    --card:      #ffffff;
+    --ink:       #1c1917;
+    --ink-soft:  #3d3530;
+    --body:      #57534e;
+    --taupe:     #a09080;
+    --rule:      #ddd8ce;
+    --rule-soft: #e5dfd5;
+    --hairline:  #f0ece4;
+    --red:       #c9001e;
+    --red-ink:   #c9001e;
+    --blue:      #1d4ed8;
+    --blue-bg:   #eff6ff;
+    --blue-bd:   #bfdbfe;
+
+    --viral:     #b91c1c; --viral-bg: #fef2f2; --viral-bd: #fca5a5;
+    --trend:     #c2410c; --trend-bg: #fff7ed; --trend-bd: #fdba74;
+    --note:      #15803d; --note-bg:  #f0fdf4; --note-bd:  #86efac;
+
+    --f-ui:    "Archivo", Arial, Helvetica, sans-serif;
+    --f-read:  Georgia, "Times New Roman", serif;
+    --f-mail:  Arial, Helvetica, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--sand);
+    color: var(--ink);
+    font-family: var(--f-read);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell { max-width: 60rem; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2.5rem); }
+  .prose { max-width: 34rem; }
+
+  h1, h2, h3, h4 { margin: 0; font-family: var(--f-read); text-wrap: balance; line-height: 1.15; }
+  p { margin: 0; }
+  a { color: var(--blue); text-underline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+  .kicker {
+    font-family: var(--f-ui); font-size: .625rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--taupe);
+  }
+
+  /* ── Bandeau, repris du masthead de l'email ─────────────────── */
+  .masthead {
+    background: var(--ink); border-top: 4px solid var(--red);
+    border-radius: 0 0 10px 10px; padding: clamp(1.8rem, 4vw, 2.6rem) clamp(1.4rem, 4vw, 2.6rem);
+    margin-bottom: clamp(2rem, 5vw, 3.2rem);
+  }
+  .masthead .kicker { color: var(--red-ink); }
+  .masthead h1 {
+    margin-top: .9rem; font-size: clamp(2rem, 5.6vw, 3.3rem); font-weight: 700;
+    letter-spacing: -.022em; color: var(--paper); max-width: 17ch;
+  }
+  .masthead .standfirst {
+    margin-top: 1.1rem; max-width: 34rem; font-size: clamp(1rem, 1.9vw, 1.13rem);
+    color: #c4bfb8; line-height: 1.6;
+  }
+
+  /* ── Inscription ────────────────────────────────────────────── */
+  .join { margin-top: 1.9rem; max-width: 33rem; }
+  .field { display: flex; gap: .5rem; flex-wrap: wrap; }
+  input[type="email"] {
+    flex: 1 1 14rem; min-width: 0;
+    font-family: var(--f-ui); font-size: .97rem; color: var(--ink);
+    background: var(--paper); border: 1px solid var(--rule);
+    border-radius: 6px; padding: .8rem .95rem;
+  }
+  input[type="email"]::placeholder { color: var(--taupe); }
+  input[type="email"]:focus { border-color: var(--red); }
+  button {
+    font-family: var(--f-ui); font-size: .93rem; font-weight: 700;
+    letter-spacing: .01em; color: #faf7f2; background: var(--red);
+    border: 1px solid var(--red); border-radius: 6px;
+    padding: .8rem 1.5rem; cursor: pointer; transition: filter .15s ease;
+  }
+  button:hover { filter: brightness(1.12); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .masthead .smallprint { margin-top: .8rem; font-family: var(--f-ui); font-size: .8rem; color: var(--taupe); }
+  .masthead .smallprint a { color: #c4bfb8; }
+  .smallprint { margin-top: .8rem; font-family: var(--f-ui); font-size: .8rem; color: var(--taupe); }
+
+  .done {
+    display: none; background: var(--paper); border-left: 4px solid var(--red);
+    border-radius: 0 6px 6px 0; padding: .95rem 1.15rem;
+  }
+  .done.on { display: block; }
+  .done strong { display: block; font-family: var(--f-ui); font-weight: 700; font-size: .95rem; color: var(--ink); margin-bottom: .25rem; }
+  .done p { font-family: var(--f-ui); font-size: .86rem; color: var(--body); line-height: 1.55; }
+  .join.sent .field, .join.sent .smallprint { display: none; }
+
+  /* ── Sections ───────────────────────────────────────────────── */
+  section { padding: clamp(2.4rem, 5.5vw, 3.8rem) 0; border-top: 1px solid var(--rule); }
+  section > .kicker { display: block; margin-bottom: 1rem; }
+  h2 { font-size: clamp(1.45rem, 3vw, 1.95rem); font-weight: 700; letter-spacing: -.02em; }
+  section > h2 + p { margin-top: 1rem; color: var(--body); }
+
+  /* ═══════════════════════════════════════════════════════════
+     APERÇU DE L'EMAIL — mêmes couleurs, mêmes polices, mêmes
+     dimensions (620 px) que newsletter_template.html.
+     ═══════════════════════════════════════════════════════════ */
+  .inbox {
+    margin-top: 1.8rem; background: var(--sand);
+    border: 1px solid var(--rule); border-radius: 10px;
+    padding: clamp(1rem, 3vw, 2rem); overflow-x: auto;
+  }
+  .mail { max-width: 620px; margin: 0 auto; font-family: var(--f-mail); }
+
+  .mail-head {
+    background: #1c1917; border-top: 4px solid #c9001e; border-radius: 10px 10px 0 0;
+    padding: 26px 30px 24px;
+  }
+  .mail-head .eyebrow {
+    font-family: var(--f-mail); font-size: 10px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase; color: #c9001e;
+  }
+  .mail-head h3 {
+    margin: 10px 0 16px; font-family: var(--f-read); font-size: 26px; font-weight: 700;
+    line-height: 1.15; color: #faf7f2; letter-spacing: -.5px;
+  }
+  .datepill {
+    display: inline-block; background: #2c2621; border: 1px solid #3d3530;
+    border-radius: 20px; padding: 5px 16px;
+    font-size: 12px; font-weight: 600; color: #a09080;
+  }
+
+  .mail-intro {
+    background: #faf7f2; padding: 20px 30px;
+    font-family: var(--f-read); font-size: 14px; line-height: 1.7; color: #3d3530;
+  }
+
+  .mail-body { padding: 4px 0 0; }
+
+  .mcard {
+    background: #ffffff; border-radius: 8px; margin-bottom: 10px;
+    border: 1px solid #e5dfd5; border-left: 4px solid var(--bd);
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .mcard-top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 14px 18px 10px;
+  }
+  .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    font-family: var(--f-mail); font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    border-radius: 20px; padding: 3px 11px; white-space: nowrap;
+  }
+  .badge-hype { background: var(--bg); border: 1px solid var(--bdr); color: var(--fg); }
+  .badge-topic { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; }
+  .rank {
+    flex: none; width: 28px; height: 28px; border-radius: 14px; background: #1c1917;
+    display: grid; place-items: center;
+    font-family: var(--f-mail); font-size: 12px; font-weight: 700; color: #faf7f2;
+  }
+  .mcard-body { padding: 4px 18px 18px; }
+  .mcard-body h4 {
+    font-family: var(--f-read); font-size: 18px; font-weight: 700;
+    line-height: 1.25; color: #1c1917; letter-spacing: -.3px; margin-bottom: 10px;
+  }
+  .mflash {
+    font-family: var(--f-mail); font-size: 14px; font-weight: 600;
+    line-height: 1.5; color: var(--fg); margin-bottom: 10px;
+  }
+  .mdetail { font-family: var(--f-read); font-size: 13px; line-height: 1.75; color: #57534e; }
+  .msources {
+    border-top: 1px solid #f0ece4; background: #faf8f4; border-radius: 0 0 8px 8px;
+    padding: 10px 18px 14px;
+  }
+  .msources .lbl {
+    font-family: var(--f-mail); font-size: 9px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: #a09080; margin-bottom: 6px;
+  }
+  .msources p { font-family: var(--f-mail); font-size: 11px; margin-bottom: 4px; }
+  .msources a { color: #1d4ed8; text-decoration: none; font-weight: 600; }
+  .msources span { color: #a09080; }
+
+  .mnotice {
+    background: #faf7f2; border-top: 1px solid #e5dfd5; border-radius: 0 0 10px 10px;
+    padding: 18px 30px 24px;
+  }
+  .mnotice .lbl {
+    font-family: var(--f-mail); font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #a09080; margin-bottom: 8px;
+  }
+  .mnotice p { font-family: var(--f-read); font-size: 12.5px; line-height: 1.7; color: #3d3530; }
+  .mnotice .figs {
+    display: flex; gap: 18px; flex-wrap: wrap; margin: 10px 0 12px;
+    font-family: var(--f-mail); font-size: 11px; color: #57534e;
+  }
+  .mnotice .figs b { color: #1c1917; }
+  .mnotice .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mact {
+    font-family: var(--f-mail); font-size: 11px; font-weight: 600;
+    border: 1px solid #ddd8ce; border-radius: 5px; padding: 6px 12px;
+    color: #3d3530; background: #fff; text-decoration: none;
+  }
+  .mfoot {
+    text-align: center; padding: 14px 20px 0;
+    font-family: var(--f-mail); font-size: 10.5px; color: #a09080;
+  }
+  .mfoot a { color: #a09080; }
+
+  .caption { margin-top: .9rem; font-family: var(--f-ui); font-size: .81rem; color: var(--taupe); }
+
+  /* ── Chiffres ───────────────────────────────────────────────── */
+  .facts {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+    gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+    border-radius: 8px; overflow: hidden; margin-top: 1.6rem;
+  }
+  .fact { background: var(--paper); padding: 1.1rem 1.2rem; }
+  .fact dt { font-family: var(--f-ui); font-size: .6rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--taupe); }
+  .fact dd { margin: .45rem 0 0; font-family: var(--f-read); font-size: 1.55rem; font-weight: 700; letter-spacing: -.02em; color: var(--ink); }
+  .fact dd small { display: block; font-family: var(--f-ui); font-size: .8rem; font-weight: 400; color: var(--body); margin-top: .25rem; letter-spacing: 0; }
+
+  /* ── Transparence ───────────────────────────────────────────── */
+  .pledge { display: grid; grid-template-columns: 1fr; gap: 1.5rem 2.8rem; margin-top: 1.7rem; }
+  @media (min-width: 44rem) { .pledge { grid-template-columns: 1fr 1fr; } }
+  .pledge h3 { font-family: var(--f-ui); font-size: .97rem; font-weight: 700; letter-spacing: -.005em; }
+  .pledge p { margin-top: .4rem; font-size: .95rem; color: var(--body); }
+
+  ul.ticks { list-style: none; padding: 0; margin: 1.6rem 0 0; display: flex; flex-direction: column; gap: .6rem; max-width: 34rem; }
+  ul.ticks li { position: relative; padding-left: 1.35rem; font-size: .95rem; color: var(--body); }
+  ul.ticks li::before { content: "▪"; position: absolute; left: 0; top: 0; color: var(--red); }
+
+  /* ── Pied ───────────────────────────────────────────────────── */
+  footer {
+    border-top: 4px solid var(--red); background: var(--ink);
+    border-radius: 10px 10px 0 0; margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding: 1.6rem clamp(1.4rem, 4vw, 2.6rem) 2.2rem;
+    display: flex; flex-wrap: wrap; gap: .5rem 1.6rem; align-items: baseline;
+    font-family: var(--f-ui); font-size: .82rem; color: var(--taupe);
+  }
+  footer a { color: #c4bfb8; }
+  footer .wm { font-weight: 700; color: var(--paper); letter-spacing: .01em; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="shell">
+
+  <div class="masthead">
+    <p class="kicker">● Flash Info &nbsp;•&nbsp; Newsletter quotidienne</p>
+    <h1>L'actualité du jour, lue et triée avant votre réveil.</h1>
+    <p class="standfirst">Chaque matin à 8 h, un agent parcourt la presse française, écarte les doublons, retient dix sujets et vous les résume. Technologie, science, économie, monde, santé. Une lecture, six minutes.</p>
+
+    <form class="join" method="POST"
+          action="https://docs.google.com/forms/d/e/1FAIpQLSc8kXoEQC9rCAI_v08am9nYKpq4FjeHqVKqmJNlN9BWuJzy4A/formResponse"
+          target="sink">
+      <div class="field">
+        <label for="email" class="hp">Votre adresse email</label>
+        <input type="email" id="email" name="entry.259733735" required
+               autocomplete="email" placeholder="vous@exemple.fr">
+        <input type="text" name="site" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit">Recevoir l'édition</button>
+      </div>
+      <p class="smallprint">Un email par jour, jamais plus. Désinscription en un clic depuis n'importe quelle édition. <a href="/vie-privee">Ce que nous collectons</a>.</p>
+      <div class="done" role="status">
+        <strong>C'est noté.</strong>
+        <p>Votre première édition arrive demain à 8 h. Si rien n'arrive, regardez dans les indésirables — et répondez-nous, on corrigera.</p>
+      </div>
+    </form>
+    <iframe name="sink" class="hp" tabindex="-1" title="cible technique"></iframe>
+  </div>
+
+  <section style="border-top:none;padding-top:0;">
+    <span class="kicker">L'édition du 27 août, telle qu'elle est arrivée</span>
+    <h2>Voilà exactement ce que vous recevez.</h2>
+    <p class="prose">Pas une maquette : c'est le gabarit réel, avec ses couleurs, ses badges et sa mise en page. Chaque sujet porte son rang, son niveau d'écho, son thème, une phrase pour comprendre, un paragraphe pour approfondir et les sources pour vérifier.</p>
+
+    <div class="inbox">
+      <div class="mail">
+
+        <div class="mail-head">
+          <p class="eyebrow">● Flash Info &nbsp;•&nbsp; Newsletter quotidienne</p>
+          <h3>Crue au Népal, Rafale de nouvelle génération et débat au Medef</h3>
+          <span class="datepill">Mercredi 27 août 2026</span>
+        </div>
+
+        <div class="mail-intro">
+          Trois sujets dominent ce matin : une catastrophe naturelle dont le bilan s'alourdit d'heure en heure, une annonce industrielle qui engage la France pour dix ans, et le coup d'envoi officieux d'une campagne présidentielle.
+        </div>
+
+        <div class="mail-body">
+
+          <article class="mcard" style="--bd:#b91c1c;--fg:#b91c1c;--bg:#fef2f2;--bdr:#fca5a5;">
+            <div class="mcard-top">
+              <div class="badges">
+                <span class="badge badge-hype">🔥 Viral</span>
+                <span class="badge badge-topic">Monde</span>
+              </div>
+              <div class="rank">1</div>
+            </div>
+            <div class="mcard-body">
+              <h4>Népal : 180 morts et 1 300 disparus après la crue de la Koshi</h4>
+              <p class="mflash">⚡ La mousson la plus meurtrière depuis quinze ans a emporté trois ponts et coupé la vallée du reste du pays.</p>
+              <p class="mdetail">Les secours n'atteignent les villages les plus hauts qu'en hélicoptère. Katmandou a demandé l'aide de l'Inde et de la Chine, qui ont dépêché des équipes dans la nuit de mardi. Le bilan provisoire ne tient pas compte des trois districts encore inaccessibles.</p>
+            </div>
+            <div class="msources">
+              <p class="lbl">Sources consultées</p>
+              <p><a href="#">Népal : le bilan de la crue s'alourdit</a><span> — Le Monde ↗</span></p>
+              <p><a href="#">Nepal floods: rescue teams reach cut-off valleys</a><span> — Reuters ↗</span></p>
+            </div>
+          </article>
+
+          <article class="mcard" style="--bd:#c2410c;--fg:#c2410c;--bg:#fff7ed;--bdr:#fdba74;">
+            <div class="mcard-top">
+              <div class="badges">
+                <span class="badge badge-hype">📈 Trending</span>
+                <span class="badge badge-topic">Technologie</span>
+              </div>
+              <div class="rank">2</div>
+            </div>
+            <div class="mcard-body">
+              <h4>Dassault vise une livraison du « Super Rafale » entre 2033 et 2035</h4>
+              <p class="mflash">⚡ Éric Trappier confirme un standard F5 doté d'un drone de combat accompagnateur.</p>
+              <p class="mdetail">L'annonce arrive alors que le programme franco-allemand SCAF patine sur la répartition industrielle, et que Berlin évoque ouvertement une alternative. Le calendrier annoncé place la France en avance de deux ans sur son propre partenaire.</p>
+            </div>
+            <div class="msources">
+              <p class="lbl">Sources consultées</p>
+              <p><a href="#">Dassault détaille le calendrier du standard F5</a><span> — Les Échos ↗</span></p>
+            </div>
+          </article>
+
+          <article class="mcard" style="--bd:#15803d;--fg:#15803d;--bg:#f0fdf4;--bdr:#86efac;">
+            <div class="mcard-top">
+              <div class="badges">
+                <span class="badge badge-hype">💡 Notable</span>
+                <span class="badge badge-topic">Business</span>
+              </div>
+              <div class="rank">3</div>
+            </div>
+            <div class="mcard-body">
+              <h4>Présidentielle 2027 : premier grand débat au Medef</h4>
+              <p class="mflash">⚡ Six prétendants sur la même estrade, à vingt mois du scrutin.</p>
+              <p class="mdetail">L'université d'été du patronat sert de rampe de lancement officieuse. Aucun des six n'a formellement déclaré sa candidature, ce qui n'a empêché personne de dérouler un programme.</p>
+            </div>
+            <div class="msources">
+              <p class="lbl">Sources consultées</p>
+              <p><a href="#">Au Medef, une primaire qui ne dit pas son nom</a><span> — Le Figaro ↗</span></p>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="mnotice">
+          <p class="lbl">Ce que cette lettre mesure</p>
+          <p>Nous enregistrons les ouvertures et les clics pour savoir quels sujets vous intéressent. Vous êtes désigné par un identifiant tiré au sort, jamais par votre adresse.</p>
+          <div class="figs">
+            <span><b>27</b> destinataires</span>
+            <span><b>68 %</b> d'ouverture sur 30 jours</span>
+            <span><b>103</b> éditions publiées</span>
+          </div>
+          <div class="acts">
+            <a class="mact" href="#">Voir les chiffres publics</a>
+            <a class="mact" href="#">Ne plus être mesuré</a>
+            <a class="mact" href="#">Le détail de ce qui est collecté</a>
+          </div>
+        </div>
+
+        <p class="mfoot">Vous recevez cette lettre parce que vous vous y êtes inscrit. <a href="#">Se désabonner</a></p>
+
+      </div>
+    </div>
+    <p class="caption">Aperçu rendu avec les couleurs, les polices et la largeur exactes de <code>newsletter_template.html</code>. Seuls les articles sont des exemples.</p>
+  </section>
+
+  <section>
+    <span class="kicker">La lettre en chiffres</span>
+    <h2>Petite, quotidienne, et sans surprise.</h2>
+    <dl class="facts">
+      <div class="fact"><dt>Abonnés</dt><dd>27<small>et ça nous va très bien</small></dd></div>
+      <div class="fact"><dt>Fréquence</dt><dd>1 / jour<small>à 8 h, week-ends compris</small></dd></div>
+      <div class="fact"><dt>Sujets par édition</dt><dd>10<small>choisis parmi une centaine</small></dd></div>
+      <div class="fact"><dt>Éditions publiées</dt><dd>103<small>depuis avril 2026</small></dd></div>
+    </dl>
+  </section>
+
+  <section>
+    <span class="kicker">Transparence</span>
+    <h2>On vous dit ce qu'on mesure. Et on vous laisse refuser.</h2>
+    <p class="prose">La plupart des newsletters vous observent sans le dire. Celle-ci affiche ses chiffres en bas de chaque édition — vous venez de voir l'encart — et le bouton pour couper la mesure est juste à côté.</p>
+
+    <div class="pledge">
+      <div>
+        <h3>Vous n'êtes pas votre adresse</h3>
+        <p>Les ouvertures et les clics sont rattachés à un identifiant tiré au sort, jamais à votre email ni à une empreinte qui s'y ramène.</p>
+      </div>
+      <div>
+        <h3>Les chiffres sont publics</h3>
+        <p>Taux d'ouverture, sujets les plus lus, motifs de départ : tout est sur <a href="/board">le tableau de bord</a>, sans mot de passe.</p>
+      </div>
+      <div>
+        <h3>Refuser la mesure n'est pas partir</h3>
+        <p>Un clic coupe l'observation et vous gardez la lettre. Un autre vous désinscrit. Les deux boutons sont dans chaque édition.</p>
+      </div>
+      <div>
+        <h3>Rien n'est revendu</h3>
+        <p>Aucune régie, aucun pixel tiers, aucun partenaire. Votre adresse ne sort pas d'ici, et s'efface le jour où vous partez.</p>
+      </div>
+    </div>
+
+    <ul class="ticks">
+      <li>Les mesures sont désidentifiées au bout de douze mois.</li>
+      <li>La page <a href="/vie-privee">vie privée</a> détaille chaque donnée collectée, en français, sans renvoi à des conditions générales.</li>
+      <li>Un email par jour. Pas de relance, pas de « vous nous manquez », pas de deuxième liste.</li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="kicker">Toujours là ?</span>
+    <h2>Demain 8 h, dans votre boîte.</h2>
+    <form class="join" method="POST"
+          action="https://docs.google.com/forms/d/e/1FAIpQLSc8kXoEQC9rCAI_v08am9nYKpq4FjeHqVKqmJNlN9BWuJzy4A/formResponse"
+          target="sink">
+      <div class="field">
+        <label for="email2" class="hp">Votre adresse email</label>
+        <input type="email" id="email2" name="entry.259733735" required
+               autocomplete="email" placeholder="vous@exemple.fr">
+        <input type="text" name="site" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit">Recevoir l'édition</button>
+      </div>
+      <p class="smallprint">Pas de période d'essai, pas de compte à créer. Juste une adresse.</p>
+      <div class="done" role="status">
+        <strong>C'est noté.</strong>
+        <p>Votre première édition arrive demain à 8 h.</p>
+      </div>
+    </form>
+  </section>
+
+</div>
+
+<footer>
+  <span class="wm">Flash Info</span>
+  <a href="/vie-privee">Vie privée</a>
+  <a href="/board">Tableau de bord</a>
+  <span>Écrit par un agent, relu par personne — dites-le nous quand il se trompe.</span>
+</footer>
+
+<script>
+  document.querySelectorAll("form.join").forEach(function (form) {
+    form.addEventListener("submit", function (event) {
+      // Champ piège : invisible et hors tabulation, un humain ne le remplit
+      // jamais. S'il est rempli, on annule l'envoi — mais on affiche quand
+      // même la confirmation, pour ne pas apprendre au robot qu'il a été vu.
+      var trap = form.querySelector('input[name="site"]');
+      if (trap && trap.value !== "") {
+        event.preventDefault();
+      }
+      // Google Forms ne renvoie pas d'en-tête CORS : la réponse part dans
+      // l'iframe cachée et le navigateur ne peut pas la lire. La confirmation
+      // est donc optimiste.
+      form.classList.add("sent");
+      form.querySelector(".done").classList.add("on");
+    });
+  });
+</script>
+
+</body>
+</html>

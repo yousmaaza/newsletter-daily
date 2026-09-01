@@ -1,0 +1,25 @@
+[news]
+topics = [ "technologie", "science", "business", "monde", "santé",]
+# Nombre d'articles récupérés PAR TOPIC (ex: 4×5 topics = 20 articles bruts)
+count = 4
+# Nombre d'articles dans la newsletter finale
+newsletter_count = 10
+
+[sources]
+sites = []
+
+[deduplication]
+# Filtrage des articles similaires avant génération HTML
+# similarity_threshold : seuil TF-IDF entre 0.7 (large) et 1.0 (exact) — défaut 0.85
+enabled = true
+similarity_threshold = 0.70
+
+[topic_history]
+# Fenêtre glissante de mémoire thématique (en jours, entre 1 et 30)
+window_days = 7
+
+[source_presets]
+presse_nationale = [ "lemonde.fr", "lefigaro.fr", "liberation.fr", "lexpress.fr",]
+presse_eco = [ "lesechos.fr", "bfmtv.com", "latribune.fr",]
+tech = [ "01net.com", "numerama.com", "clubic.com", "zdnet.fr",]
+international = [ "reuters.com", "bbc.com", "apnews.com",]

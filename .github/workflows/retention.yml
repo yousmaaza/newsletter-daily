@@ -1,0 +1,86 @@
+name: Rétention des données
+
+# Applique les durées de conservation annoncées aux lecteurs sur la page vie
+# privée. Sans cette exécution périodique, la politique de rétention ne serait
+# qu'une promesse.
+#
+# Le script ne supprime aucune ligne : il désidentifie au-delà de 12 mois. Les
+# volumes publiés sur /board restent donc exacts après passage.
+
+on:
+  schedule:
+    # Le 1er de chaque mois à 04:00 UTC — avant l'envoi quotidien de 05:00,
+    # pour ne jamais réécrire data/ pendant que la newsletter s'exécute.
+    - cron: "0 4 1 * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Simulation — compte sans rien modifier"
+        required: true
+        default: "true"
+        type: choice
+        options: ["true", "false"]
+
+# Une seule exécution à la fois : deux purges concurrentes se marcheraient
+# dessus sur les mêmes fichiers.
+concurrency:
+  group: retention
+  cancel-in-progress: false
+
+jobs:
+  apply-retention:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Simulation
+        id: dry
+        run: |
+          python scripts/apply_retention.py --dry-run | tee /tmp/dry.txt
+          echo "summary<<EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/dry.txt >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Application
+        if: ${{ github.event_name == 'schedule' || inputs.dry_run == 'false' }}
+        run: python scripts/apply_retention.py
+
+      - name: Commit des données purgées
+        if: ${{ github.event_name == 'schedule' || inputs.dry_run == 'false' }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- data/; then
+            echo "Aucune donnée n'a atteint sa durée de conservation — rien à commiter."
+            exit 0
+          fi
+          git add data/
+          git commit -m "chore: purge de rétention [skip ci]
+
+          Désidentification des mesures de plus de 12 mois, appliquée
+          automatiquement. Aucune ligne supprimée : les volumes publiés
+          sur /board restent exacts."
+          # Rebase avant push : le pipeline quotidien écrit aussi dans data/
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Récapitulatif
+        if: always()
+        run: |
+          {
+            echo "### Rétention des données"
+            echo ""
+            echo '```'
+            cat /tmp/dry.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

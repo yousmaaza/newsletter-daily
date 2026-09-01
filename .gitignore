@@ -1,0 +1,31 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.DS_Store
+# Sorties locales (aperçus, archives d'éditions)
+output/
+
+# Sorties de test navigateur
+.playwright-mcp/
+.idea/
+
+# Données d'abonnés — vivent dans le dépôt privé DATA_REPO (#55).
+# Rapatriées localement par scripts/fetch_subscriber_data.py, jamais commitées :
+# le dépôt applicatif a vocation à devenir public.
+config/recipients.toml
+config/unsubscribed.toml
+config/subscriber_ids.toml
+config/tracking_optout.toml
+
+# Journaux d'exécution locaux
+logs/
+
+# Doublons de synchronisation macOS
+*\ 2.*

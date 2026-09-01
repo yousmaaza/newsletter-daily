@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Anniversaire - 33 ans à La Felicità !</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-amber-50 text-slate-800 min-sec flex flex-col justify-between min-h-screen">
+
+    <div class="max-w-md mx-auto p-4 w-full my-auto" x-data="quizApp()">
+
+        <div class="bg-white rounded-2xl shadow-xl p-6 border border-amber-100">
+
+            <template x-if="step === 'welcome'">
+                <div class="text-center space-y-4">
+                    <span class="text-4xl">🍕</span>
+                    <h1 class="text-2xl font-black text-amber-600">Les 33 ans à La Felicità</h1>
+                    <p class="text-sm text-slate-600">Entre code, bouffe et bonne humeur. Entre ton prénom pour voir si tu me connais vraiment :</p>
+                    <input type="text" x-model="username" placeholder="Ton prénom..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-center font-medium">
+                    <button @click="startQuiz" :disabled="!username.trim()" class="w-full bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition shadow-md">
+                        C'est parti ! 🚀
+                    </button>
+                </div>
+            </template>
+
+            <template x-if="step === 'quiz'">
+                <div>
+                    <div class="flex justify-between text-xs font-bold text-amber-600 mb-2 uppercase tracking-wider">
+                        <span x-text="`Question ${currentQuestion + 1} / ${questions.length}`"></span>
+                        <span x-text="username"></span>
+                    </div>
+
+                    <h2 class="text-lg font-bold text-slate-800 mb-4" x-text="questions[currentQuestion].title"></h2>
+
+                    <div class="space-y-3">
+                        <template x-for="(option, index) in questions[currentQuestion].options" :key="index">
+                            <button @click="selectOption(index)"
+                                    class="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-amber-50 hover:border-amber-300 transition text-sm font-medium flex items-center justify-between">
+                                <span x-text="option"></span>
+                                <span class="text-amber-500 font-bold">→</span>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="step === 'result'">
+                <div class="text-center space-y-4">
+                    <span class="text-4xl">🎉</span>
+                    <h2 class="text-2xl font-black text-slate-900">Quiz terminé, <span class="text-amber-600" x-text="username"></span> !</h2>
+                    <p class="text-sm text-slate-600">Score : <strong class="text-amber-600 text-lg" x-text="score"></strong> / <span x-text="questions.length"></span></p>
+
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-left space-y-2">
+                        <span class="text-xs font-bold uppercase tracking-wide text-amber-600 block">🎁 Ton gage officiel de la soirée :</span>
+                        <p class="text-slate-700 font-semibold text-sm" x-text="assignedGage"></p>
+                    </div>
+
+                    <button @click="resetQuiz" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl transition text-sm">
+                        Recommencer 🔄
+                    </button>
+                </div>
+            </template>
+
+        </div>
+
+        <p class="text-center text-xs text-slate-400 mt-6">Fait avec ❤️ pour les 33 ans</p>
+    </div>
+
+    <script>
+        function quizApp() {
+            return {
+                step: 'welcome', // welcome, quiz, result
+                username: '',
+                currentQuestion: 0,
+                score: 0,
+                assignedGage: '',
+
+                questions: [
+                    {
+                        title: "J’ai officiellement 33 ans. Quel est le premier truc qui a lâché dans mon corps ?",
+                        options: [
+                            "Mon dos (merci les chaises de bureau)",
+                            "Ma patience face au code legacy",
+                            "Ma tolérance au lactose (sauf à La Felicità)"
+                        ],
+                        correct: 0
+                    },
+                    {
+                        title: "Combien d'heures de 'travail' productif ai-je réellement passées à La Felicità cette année ?",
+                        options: [
+                            "Moins de 2h (le reste c'est de la pause)",
+                            "Plus que chez moi",
+                            "Le temps exact de digérer 4 pizzas"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        title: "Si mon cerveau était un commit GitHub, quel serait le message du dernier bugfix ?",
+                        options: [
+                            "Fix: remove coffee dependency (impossible)",
+                            "Hotfix: impossible de sortir du lit avant 10h",
+                            "Refactor: fusion de la Tunisie et de Paris"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        title: "Quel plat pourrais-je manger 7j/7 sans m'en lasser ?",
+                        options: [
+                            "Un bon Keftaji bien épicé",
+                            "Une pizza 4 fromages XXL",
+                            "N'importe quoi tant qu'il y a du gras et des carbs"
+                        ],
+                        correct: 2
+                    }
+                ],
+
+                gages: [
+                    "Le 'Client Mystère' : Va commander la prochaine tournée au bar en prenant l'accent italien le plus cliché possible.",
+                    "Le Pitch Incompréhensible : Explique à quelqu'un de la tablée une fausse startup tech absurde (ex: 'Uber pour les miettes de pain') pendant 1 minute sans rire.",
+                    "La Taxe du Chef : Pique discrètement une frite ou un bout de croûte de pizza dans l'assiette de ton voisin de gauche.",
+                    "Le Discours improvisé : Fais un toast improvisé de 30 secondes pour expliquer pourquoi tu es le meilleur pote du monde.",
+                    "Le Paiement Cash : Paye la prochaine tournée avec l'air d'un parrain de la mafia en glissant un mot mystérieux au serveur."
+                ],
+
+                startQuiz() {
+                    if (this.username.trim() !== '') {
+                        this.step = 'quiz';
+                        this.currentQuestion = 0;
+                        this.score = 0;
+                    }
+                },
+
+                selectOption(index) {
+                    // Optionnel : tu peux compter les points si tu veux, ici on incrémente juste
+                    if (index === this.questions[this.currentQuestion].correct) {
+                        this.score++;
+                    }
+
+                    if (this.currentQuestion < this.questions.length - 1) {
+                        this.currentQuestion++;
+                    } else {
+                        // Fin du quiz : attribution aléatoire d'un gage
+                        const randomIndex = Math.floor(Math.random() * this.gages.length);
+                        this.assignedGage = this.gages[randomIndex];
+                        this.step = 'result';
+                    }
+                },
+
+                resetQuiz() {
+                    this.step = 'welcome';
+                    this.username = '';
+                    this.currentQuestion = 0;
+                    this.score = 0;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

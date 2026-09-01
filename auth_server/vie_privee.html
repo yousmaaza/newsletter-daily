@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ce que je mesure — Daily News</title>
+<meta name="description" content="Ce que la newsletter Daily News mesure, pourquoi, combien de temps, et comment s'y soustraire.">
+<meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:     #faf8f4;
+    --card:      #ffffff;
+    --card-alt:  #f6f2ec;
+    --ink:       #1c1917;
+    --body:      #3d3530;
+    --muted:     #8a7f74;
+    --rule:      #e5dfd5;
+    --rule-firm: #ddd8ce;
+    --accent:    #c9001e;
+    --accent-bg: #fdf2f3;
+    --ok:        #15803d;
+    --ok-bg:     #f0fdf4;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:     #16130f;
+      --card:      #1e1a16;
+      --card-alt:  #262019;
+      --ink:       #f5f0e8;
+      --body:      #ccc2b6;
+      --muted:     #948a7e;
+      --rule:      #322b23;
+      --rule-firm: #3d352c;
+      --accent:    #f0808f;
+      --accent-bg: #2c1a1c;
+      --ok:        #6fbf95;
+      --ok-bg:     #16261c;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:     #16130f;
+    --card:      #1e1a16;
+    --card-alt:  #262019;
+    --ink:       #f5f0e8;
+    --body:      #ccc2b6;
+    --muted:     #948a7e;
+    --rule:      #322b23;
+    --rule-firm: #3d352c;
+    --accent:    #f0808f;
+    --accent-bg: #2c1a1c;
+    --ok:        #6fbf95;
+    --ok-bg:     #16261c;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--body);
+    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    font-size: 17.5px;
+    line-height: 1.72;
+    margin: 0;
+    padding: 0 1.25rem 6rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 40rem; margin: 0 auto; }
+
+  /* ── En-tête ──────────────────────────────────────────── */
+
+  header {
+    padding: 4rem 0 2rem;
+    border-bottom: 2px solid var(--ink);
+    display: flex; flex-direction: column; gap: 0.9rem;
+  }
+
+  .kicker {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.19em;
+    text-transform: uppercase; color: var(--accent); margin: 0;
+  }
+
+  h1 {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: clamp(2.2rem, 6vw, 3.1rem);
+    font-weight: 600; line-height: 1.08; letter-spacing: -0.02em;
+    color: var(--ink); text-wrap: balance; margin: 0;
+  }
+
+  .lede { font-size: 1.18rem; line-height: 1.6; color: var(--body); margin: 0; }
+
+  .stamp {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.73rem;
+    color: var(--muted); margin: 0.3rem 0 0;
+  }
+
+  /* ── Sections ─────────────────────────────────────────── */
+
+  section { padding-top: 3rem; display: flex; flex-direction: column; gap: 1.1rem; }
+
+  h2 {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 1.7rem; font-weight: 600; line-height: 1.22;
+    letter-spacing: -0.012em; color: var(--ink); text-wrap: balance; margin: 0;
+  }
+
+  h3 {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--muted); margin: 0.7rem 0 -0.3rem;
+  }
+
+  p { margin: 0; }
+  strong { font-weight: 600; color: var(--ink); }
+  em { font-style: italic; }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2.5px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  code {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.82em;
+    background: var(--card-alt); border-radius: 3px; padding: 0.12em 0.36em;
+  }
+
+  /* ── L'essentiel ──────────────────────────────────────── */
+
+  .digest {
+    background: var(--card); border: 1px solid var(--rule-firm);
+    border-top: 3px solid var(--accent); border-radius: 8px;
+    padding: 1.6rem 1.8rem;
+    display: flex; flex-direction: column; gap: 0.85rem;
+  }
+
+  .digest ul {
+    margin: 0; padding: 0; list-style: none;
+    display: flex; flex-direction: column; gap: 0.7rem;
+  }
+
+  /* Pas de grid ici : un conteneur grid blockifie chaque élément inline en
+     item séparé, ce qui casserait toute ligne contenant un <strong>. */
+  .digest li {
+    position: relative; padding-left: 2rem; line-height: 1.6;
+  }
+
+  .digest li::before {
+    content: "—"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-weight: 600;
+  }
+
+  /* ── Tableau des données ──────────────────────────────── */
+
+  .table-scroll { overflow-x: auto; }
+
+  table { border-collapse: collapse; width: 100%; min-width: 30rem; }
+
+  th {
+    font-family: "IBM Plex Sans", sans-serif;
+    text-align: left; font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    padding: 0 1rem 0.6rem 0; border-bottom: 1.5px solid var(--rule-firm);
+    vertical-align: bottom;
+  }
+
+  td {
+    padding: 0.85rem 1rem 0.85rem 0; border-bottom: 1px solid var(--rule);
+    vertical-align: top; font-size: 0.97rem; line-height: 1.6;
+  }
+
+  td:first-child { color: var(--ink); font-weight: 500; }
+  th:last-child, td:last-child { padding-right: 0; }
+
+  .count {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.8rem;
+    color: var(--muted); display: block; margin-top: 0.2rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Listes ───────────────────────────────────────────── */
+
+  ul.plain {
+    margin: 0; padding-left: 1.2rem;
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  ul.plain li::marker { color: var(--muted); }
+
+  /* ── Encarts ──────────────────────────────────────────── */
+
+  .note {
+    background: var(--card-alt); border-radius: 8px;
+    padding: 1.2rem 1.4rem; font-size: 0.97rem; line-height: 1.65;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+
+  .note.frank { background: var(--accent-bg); }
+
+  .note .tag {
+    font-family: "IBM Plex Sans", sans-serif; font-size: 0.66rem;
+    font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--accent); margin: 0;
+  }
+
+  /* ── Actions ──────────────────────────────────────────── */
+
+  .actions { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .action {
+    background: var(--card); border: 1px solid var(--rule-firm); border-radius: 8px;
+    padding: 1.1rem 1.3rem;
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    justify-content: space-between; gap: 0.5rem 1rem;
+  }
+
+  .action .what { font-size: 1rem; color: var(--ink); font-weight: 500; }
+  .action .how { font-size: 0.9rem; color: var(--muted); flex: 1 1 14rem; }
+
+  footer {
+    margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule);
+    font-size: 0.88rem; color: var(--muted); line-height: 1.65;
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+
+  @media (max-width: 34rem) {
+    .digest { padding: 1.3rem 1.3rem; }
+    .action { flex-direction: column; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">Daily News · Vie privée</p>
+    <h1>Ce que je mesure</h1>
+    <p class="lede">Cette newsletter mesure sa propre lecture. Voici exactement quoi, pourquoi, et comment vous y soustraire.</p>
+    <p class="stamp">Mise à jour : 26 août 2026</p>
+  </header>
+
+  <section>
+    <h2>L&rsquo;essentiel</h2>
+    <div class="digest">
+      <ul>
+        <li>J&rsquo;enregistre l&rsquo;ouverture de l&rsquo;email, les liens cliqu&eacute;s et les r&eacute;actions laiss&eacute;es. Rien d&rsquo;autre.</li>
+        <li>&Ccedil;a sert &agrave; une seule chose&nbsp;: savoir quels sujets valent votre temps, et lesquels arr&ecirc;ter.</li>
+        <li>Ces donn&eacute;es ne sont ni vendues, ni partag&eacute;es, ni utilis&eacute;es pour de la publicit&eacute;.</li>
+        <li>Vous pouvez refuser la mesure <strong>en restant abonn&eacute;</strong>, ou demander la suppression de tout ce qui vous concerne.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Qui est responsable</h2>
+    <p>Daily News est une newsletter personnelle, &eacute;dit&eacute;e &agrave; titre individuel par Yousri Maazaoui. Il n&rsquo;y a ni soci&eacute;t&eacute;, ni r&eacute;gie publicitaire, ni prestataire marketing derri&egrave;re.</p>
+    <p>Pour toute question ou demande relative &agrave; vos donn&eacute;es, il suffit de <strong>r&eacute;pondre &agrave; n&rsquo;importe quelle &eacute;dition</strong> — l&rsquo;adresse d&rsquo;envoi est surveill&eacute;e.</p>
+  </section>
+
+  <section>
+    <h2>Ce que je collecte</h2>
+    <p>La liste est exhaustive. Si une donn&eacute;e ne figure pas dans ce tableau, elle n&rsquo;est pas enregistr&eacute;e.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Donn&eacute;e</th><th>D&rsquo;o&ugrave; elle vient</th><th>&Agrave; quoi elle sert</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Votre adresse email</td>
+            <td>Le formulaire d&rsquo;inscription que vous avez rempli</td>
+            <td>Vous envoyer la newsletter. C&rsquo;est tout.</td>
+          </tr>
+          <tr>
+            <td>Ouverture de l&rsquo;&eacute;dition
+              <span class="count">1&nbsp;707 depuis avril</span></td>
+            <td>Une image invisible d&rsquo;un pixel, charg&eacute;e &agrave; l&rsquo;ouverture</td>
+            <td>Savoir si les &eacute;ditions sont lues, et &agrave; quelle heure</td>
+          </tr>
+          <tr>
+            <td>Clics sur les articles
+              <span class="count">168 depuis avril</span></td>
+            <td>Les liens passent par une redirection avant d&rsquo;atteindre la source</td>
+            <td>Savoir quels sujets et quelles positions int&eacute;ressent</td>
+          </tr>
+          <tr>
+            <td>R&eacute;actions par article
+              <span class="count">31 depuis avril</span></td>
+            <td>Les boutons sous chaque article, si vous les utilisez</td>
+            <td>Distinguer ce qui plaît de ce qui est seulement cliqu&eacute;</td>
+          </tr>
+          <tr>
+            <td>Avis sur l&rsquo;&eacute;dition
+              <span class="count">7 depuis avril</span></td>
+            <td>Les boutons 👍 😐 👎 en bas d&rsquo;&eacute;dition, et le commentaire libre</td>
+            <td>Ajuster le ton, le format et la longueur</td>
+          </tr>
+          <tr>
+            <td>Motif de d&eacute;sinscription
+              <span class="count">9 depuis avril</span></td>
+            <td>Le formulaire propos&eacute; au moment du d&eacute;part</td>
+            <td>Comprendre pourquoi les gens partent</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p class="tag">Comment vous &ecirc;tes identifi&eacute;</p>
+      <p>Ces mesures ne sont pas rattach&eacute;es &agrave; votre adresse email, mais &agrave; un <strong>identifiant al&eacute;atoire</strong> qui vous est propre et qui n&rsquo;a aucun lien math&eacute;matique avec elle. Il n&rsquo;est utilis&eacute; nulle part ailleurs, et supprimer la correspondance suffit &agrave; rendre l&rsquo;historique anonyme.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ce que je ne fais pas</h2>
+    <ul class="plain">
+      <li>Aucune vente, aucune location, aucun partage de votre adresse ou de vos donn&eacute;es de lecture.</li>
+      <li>Aucun cookie publicitaire, aucun traceur tiers, aucune r&eacute;gie.</li>
+      <li>Aucun profilage publicitaire ni recoupement avec d&rsquo;autres sources.</li>
+      <li>Aucune d&eacute;cision automatis&eacute;e vous concernant.</li>
+      <li>Aucun transfert hors de l&rsquo;Union europ&eacute;enne autre que ceux list&eacute;s ci-dessous.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Qui d&rsquo;autre y a acc&egrave;s</h2>
+    <p>Aucun humain en dehors de moi. Trois prestataires techniques h&eacute;bergent l&rsquo;infrastructure et n&rsquo;exploitent pas ces donn&eacute;es pour leur compte&nbsp;:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Prestataire</th><th>Son r&ocirc;le</th></tr></thead>
+        <tbody>
+          <tr><td>Google (Gmail, Forms)</td><td>Envoi des emails et formulaire d&rsquo;inscription</td></tr>
+          <tr><td>GitHub</td><td>Stockage des fichiers de mesures, en d&eacute;p&ocirc;t priv&eacute;</td></tr>
+          <tr><td>Railway</td><td>H&eacute;bergement du serveur qui enregistre les interactions</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>La s&eacute;lection des articles est produite par une intelligence artificielle, qui travaille uniquement sur des articles de presse publics&nbsp;: <strong>aucune de vos donn&eacute;es ne lui est transmise.</strong></p>
+  </section>
+
+  <section>
+    <h2>Combien de temps</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Donn&eacute;e</th><th>Dur&eacute;e de conservation</th></tr></thead>
+        <tbody>
+          <tr><td>Adresse email</td><td>Tant que vous &ecirc;tes abonn&eacute;</td></tr>
+          <tr><td>Ouvertures, clics, r&eacute;actions</td><td>12 mois, puis d&eacute;tach&eacute;es de vous</td></tr>
+          <tr><td>Avis laiss&eacute;s en bas d&rsquo;&eacute;dition</td><td>12 mois, puis effac&eacute;s avec l&rsquo;identifiant qui les portait</td></tr>
+          <tr><td>Motifs de d&eacute;part</td><td>Conserv&eacute;s — ils ne sont rattach&eacute;s &agrave; personne</td></tr>
+          <tr><td>Adresse d&eacute;sinscrite</td><td>Conserv&eacute;e seule, pour ne jamais vous r&eacute;inscrire par erreur</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Passé douze mois, les lignes de mesure ne sont pas supprim&eacute;es mais coup&eacute;es de leur identifiant&nbsp;: les totaux publics restent justes, plus rien ne remonte &agrave; une personne.</p>
+    <p>Les motifs de d&eacute;part font exception parce qu&rsquo;ils ne contiennent aucun identifiant d&egrave;s l&rsquo;enregistrement — ni adresse, ni num&eacute;ro. Ce que vous &eacute;crivez en partant sert &agrave; am&eacute;liorer la newsletter, sans jamais &ecirc;tre reli&eacute; &agrave; vous.</p>
+    <p>La derni&egrave;re ligne peut surprendre&nbsp;: garder votre adresse apr&egrave;s votre d&eacute;part est ce qui garantit que vous ne recevrez plus rien. Elle n&rsquo;est rattach&eacute;e &agrave; aucune autre donn&eacute;e.</p>
+  </section>
+
+  <section>
+    <h2>Vos droits</h2>
+    <p>Le RGPD vous donne des droits sur ces donn&eacute;es. Voici comment les exercer, concr&egrave;tement.</p>
+
+    <div class="actions">
+      <div class="action">
+        <span class="what">Ne plus &ecirc;tre mesur&eacute;</span>
+        <span class="how">Le lien pr&eacute;sent dans chaque &eacute;dition. Effet imm&eacute;diat, vous restez abonn&eacute;.</span>
+      </div>
+      <div class="action">
+        <span class="what">Ne plus rien recevoir</span>
+        <span class="how">Le lien de d&eacute;sinscription, en bas de chaque &eacute;dition.</span>
+      </div>
+      <div class="action">
+        <span class="what">Savoir ce qui est enregistr&eacute; sur vous</span>
+        <span class="how">R&eacute;pondez &agrave; une &eacute;dition&nbsp;: je vous envoie vos donn&eacute;es sous 30&nbsp;jours.</span>
+      </div>
+      <div class="action">
+        <span class="what">Tout faire effacer</span>
+        <span class="how">R&eacute;pondez &agrave; une &eacute;dition. Suppression sous 30&nbsp;jours, confirmation &agrave; l&rsquo;appui.</span>
+      </div>
+      <div class="action">
+        <span class="what">Corriger une information</span>
+        <span class="how">R&eacute;pondez &agrave; une &eacute;dition en indiquant ce qui est inexact.</span>
+      </div>
+    </div>
+
+    <p>Si une demande reste sans suite, vous pouvez saisir la <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener">CNIL</a>.</p>
+  </section>
+
+  <section>
+    <h2>Les chiffres sont publics</h2>
+    <p>Ce que ces mesures produisent est consultable par tout le monde, sur le <a href="https://newsletter-ai-production-e4ea.up.railway.app/board">tableau de bord de la newsletter</a>&nbsp;: taux d&rsquo;ouverture, sujets qui accrochent, fiabilit&eacute; des envois.</p>
+    <p>Cette page ne contient que des compteurs agr&eacute;g&eacute;s. Aucune adresse, aucun identifiant, aucun commentaire nominatif n&rsquo;y figure — c&rsquo;est v&eacute;rifi&eacute; automatiquement &agrave; chaque publication.</p>
+  </section>
+
+  <section>
+    <h2>Ce qui a chang&eacute; en ao&ucirc;t 2026</h2>
+    <div class="note frank">
+      <p class="tag">En toute franchise</p>
+      <p>Cette page n&rsquo;existait pas avant. La mesure d&rsquo;audience fonctionnait depuis avril 2026 sans que vous en soyez inform&eacute;s, et sans moyen de la refuser. C&rsquo;&eacute;tait une erreur.</p>
+      <p>En v&eacute;rifiant le syst&egrave;me, j&rsquo;ai aussi d&eacute;couvert que l&rsquo;identifiant cens&eacute; vous rendre anonymes pouvait en r&eacute;alit&eacute; &ecirc;tre reli&eacute; &agrave; votre adresse. Il a &eacute;t&eacute; remplac&eacute; par un identifiant al&eacute;atoire, et tout l&rsquo;historique a &eacute;t&eacute; repris.</p>
+      <p>Trois choses ont &eacute;t&eacute; ajout&eacute;es depuis&nbsp;: cette page, le refus de la mesure sans d&eacute;sinscription, et une dur&eacute;e de conservation qui n&rsquo;existait pas.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Toute modification de cette page sera signal&eacute;e dans une &eacute;dition de la newsletter. La date en haut de page indique la derni&egrave;re mise &agrave; jour.</p>
+    <p>Daily News — newsletter quotidienne, &eacute;dit&eacute;e &agrave; titre personnel.</p>
+  </footer>
+
+</div>
+</body>
+</html>

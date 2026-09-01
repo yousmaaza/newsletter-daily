@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="robots" content="noindex,nofollow">
+<style>*{margin:0}</style>
+</head>
+<body>
+<title>Pouls de la newsletter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root {
+  color-scheme: light;
+  --bg:        #f5f0e7;
+  --card:      #fffdfa;
+  --card-sunk: #efe9de;
+  --ink:       #2a2420;
+  --ink-2:     #6b6055;
+  --ink-3:     #9a8f81;
+  --rule:      #e2dacd;
+  --rule-soft: #ede7dc;
+  --data:      #c9001e;
+  --data-soft: rgba(201,0,30,.12);
+  --accent:    #a86a0b;
+  --good:      #1f6f4a;
+  --warn:      #9c6206;
+  --crit:      #b3261e;
+  --shadow:    0 1px 2px rgba(42,36,32,.06), 0 6px 20px -12px rgba(42,36,32,.20);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg:        #16130f;
+    --card:      #1e1a16;
+    --card-sunk: #262119;
+    --ink:       #ece5da;
+    --ink-2:     #ab9f90;
+    --ink-3:     #7d7264;
+    --rule:      #322c24;
+    --rule-soft: #2a251e;
+    --data:      #ff6a72;
+    --data-soft: rgba(255,106,114,.18);
+    --accent:    #d9a244;
+    --good:      #6ecf9c;
+    --warn:      #e0b45c;
+    --crit:      #ef7a6e;
+    --shadow:    0 1px 2px rgba(0,0,0,.4), 0 8px 24px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:        #16130f;
+  --card:      #1e1a16;
+  --card-sunk: #262119;
+  --ink:       #ece5da;
+  --ink-2:     #ab9f90;
+  --ink-3:     #7d7264;
+  --rule:      #322c24;
+  --rule-soft: #2a251e;
+  --data:      #ff6a72;
+  --data-soft: rgba(255,106,114,.18);
+  --accent:    #d9a244;
+  --good:      #6ecf9c;
+  --warn:      #e0b45c;
+  --crit:      #ef7a6e;
+  --shadow:    0 1px 2px rgba(0,0,0,.4), 0 8px 24px -14px rgba(0,0,0,.7);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 20px 16px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---------- typographic roles ---------- */
+.eyebrow {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+h1 {
+  font-family: "Newsreader", Georgia, ui-serif, serif;
+  font-weight: 800;
+  font-size: clamp(26px, 7vw, 38px);
+  line-height: 1.04;
+  letter-spacing: -.025em;
+  margin: 4px 0 0;
+  text-wrap: balance;
+}
+h2 {
+  font-family: "Newsreader", Georgia, ui-serif, serif;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+.sub { color: var(--ink-2); font-size: 13.5px; margin: 0; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- masthead ---------- */
+.masthead { padding: 2px 2px 6px; }
+.masthead .sub { margin-top: 6px; max-width: 62ch; }
+
+/* ---------- status banner ---------- */
+.banner {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 14px 15px;
+  box-shadow: var(--shadow);
+}
+.banner-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  margin-top: 6px; flex: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 18%, transparent);
+}
+.banner-body { flex: 1; min-width: 0; }
+.banner-title { font-weight: 600; font-size: 14.5px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.banner-meta { color: var(--ink-2); font-size: 12.5px; margin-top: 3px; }
+.is-good { color: var(--good); }
+.is-crit { color: var(--crit); }
+.is-warn { color: var(--warn); }
+
+/* ---------- live stamp ---------- */
+.livestamp {
+  display: flex; align-items: center; gap: 7px;
+  font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink-3); margin: -4px 2px 0;
+}
+.livedot { width: 6px; height: 6px; border-radius: 50%; background: var(--good); flex: none; }
+.livedot.stale { background: var(--warn); }
+.livedot.off { background: var(--ink-3); }
+@media (prefers-reduced-motion: no-preference) {
+  .livedot:not(.off) { animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+}
+
+/* ---------- cards ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 16px 15px;
+  box-shadow: var(--shadow);
+}
+.card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 3px; }
+.card-note { color: var(--ink-2); font-size: 12.5px; margin: 6px 0 0; }
+.card-note strong { color: var(--ink); font-weight: 600; }
+
+/* ---------- hero ---------- */
+.hero { display: flex; flex-direction: column; gap: 12px; }
+.hero-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.hero-figure { display: flex; align-items: baseline; gap: 4px; }
+.hero-num {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 800;
+  font-size: clamp(46px, 15vw, 66px);
+  line-height: .9;
+  letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums;
+}
+.hero-unit { font-family: "Newsreader", Georgia, serif; font-weight: 700; font-size: 22px; color: var(--ink-2); }
+.hero-side { text-align: right; }
+.delta { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+
+/* ---------- kpi grid ---------- */
+.kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.kpi { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 12px 13px; box-shadow: var(--shadow); }
+.kpi-val { font-family: "Newsreader", Georgia, serif; font-weight: 700; font-size: 25px; line-height: 1.1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.kpi-lab { color: var(--ink-2); font-size: 12px; margin-top: 2px; }
+
+/* ---------- controls ---------- */
+.seg { display: inline-flex; background: var(--card-sunk); border: 1px solid var(--rule); border-radius: 9px; padding: 2px; gap: 2px; }
+.seg button {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11.5px; font-weight: 500;
+  border: 0; border-radius: 7px; padding: 5px 10px;
+  background: transparent; color: var(--ink-2); cursor: pointer;
+  min-height: 30px;
+}
+.seg button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.donut { display: grid; grid-template-columns: 170px minmax(0, 330px); gap: 26px;
+         align-items: center; justify-content: start; margin: 4px 0 2px; }
+@media (max-width: 620px) { .donut { grid-template-columns: 1fr; justify-items: center; } }
+.donut svg { width: 170px; height: 170px; display: block; }
+.donut .seg { transition: opacity .12s; cursor: default; }
+.donut svg:hover .seg { opacity: .35; }
+.donut svg .seg:hover { opacity: 1 !important; }
+.donut .d-tot { font-family: "IBM Plex Mono", monospace; font-size: 27px; font-weight: 500; fill: var(--ink); }
+.donut .d-lbl { font-family: "IBM Plex Mono", monospace; font-size: 8px; letter-spacing: .18em; fill: var(--ink-3); }
+.tlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; width: 100%; }
+.tlist li + li { border-top: 1px solid var(--rule-soft); padding-top: 3px; }
+.tlist li { display: grid; grid-template-columns: 11px 1fr auto auto; gap: 9px; align-items: center; font-size: 12.5px; }
+.tlist .sw { width: 9px; height: 9px; border-radius: 2px; display: block; }
+.tlist .nm { color: var(--ink-2); }
+.tlist .nm.conf { color: var(--ink); font-weight: 600; }
+.tlist .pc, .tlist .ct {
+  font-family: "IBM Plex Mono", monospace; font-size: 11.5px;
+  font-variant-numeric: tabular-nums; color: var(--ink-3);
+}
+.tlist .pc { color: var(--ink-2); min-width: 3.4rem; text-align: right; }
+.tlist .ct { min-width: 2.6rem; text-align: right; }
+.datenav {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: var(--card-sunk); border: 1px solid var(--rule);
+  border-radius: 9px; padding: 8px 10px; margin: 0 0 16px;
+}
+.datenav a, .datenav span.cur {
+  font-family: "IBM Plex Mono", monospace; font-size: 12px;
+  padding: 4px 10px; border-radius: 6px; text-decoration: none; color: var(--ink-2);
+}
+.datenav span.cur { background: var(--card); color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.10); }
+.datenav a:hover { background: var(--card); color: var(--ink); }
+.datenav .mute { color: var(--ink-3); opacity: .45; }
+.dstrip { display: flex; gap: 2px; align-items: flex-end; height: 30px; flex: 1; min-width: 150px; }
+.dstrip a { flex: 1; min-width: 3px; display: block; padding: 0; border-radius: 2px 2px 0 0; background: var(--rule-firm, var(--ink-3)); opacity: .55; }
+.dstrip a:hover { opacity: 1; }
+.dstrip a.cur { background: var(--data); opacity: 1; }
+.art {
+  display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 12px;
+  align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--rule-soft);
+}
+.art:last-of-type { border-bottom: 0; }
+.art .rk { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-3); }
+.art .ti { font-size: 14px; color: var(--ink); }
+.art .ti em { display: block; font-style: normal; font-family: "IBM Plex Mono", monospace;
+              font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.art .sc { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-2);
+           font-variant-numeric: tabular-nums; }
+.art.cold .ti { color: var(--ink-2); }
+.art.cold .rk, .art.cold .sc { opacity: .6; }
+@media (max-width: 560px) { .art { grid-template-columns: 1.8rem 1fr; } .art .sc { grid-column: 2; } }
+.rlist { display: flex; flex-direction: column; gap: 4px; }
+.rrow {
+  display: grid; grid-template-columns: 5.4rem 4.6rem 1fr 4.4rem; gap: 10px;
+  align-items: center; font-family: "IBM Plex Mono", monospace; font-size: 11.5px;
+  background: var(--card-sunk); border-radius: 6px; padding: 5px 9px;
+}
+.rrow .rd { color: var(--ink); font-variant-numeric: tabular-nums; }
+.rrow .rw { color: var(--ink-3); font-size: 10.5px; }
+.rrow .rb { height: 6px; background: var(--rule); border-radius: 3px; position: relative; }
+.rrow .rb i { position: absolute; top: 0; bottom: 0; width: 3px; border-radius: 2px; display: block; }
+.rrow .rb u { position: absolute; top: -2px; bottom: -2px; width: 1px; background: var(--ink-3); opacity: .5; }
+.rrow .rp {
+  text-align: right; font-size: 10.5px; letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 620px) { .rrow { grid-template-columns: 4.6rem 1fr 4rem; } .rrow .rw { display: none; } }
+.periods { margin-top: 12px; }
+.periods a {
+  font: inherit; font-family: "IBM Plex Mono", monospace; font-size: 12px;
+  padding: 5px 11px; border-radius: 7px; text-decoration: none;
+  color: var(--ink-2); background: transparent; border: 0;
+}
+.periods a[aria-current="true"] { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.periods a:focus-visible { outline: 2px solid var(--data); outline-offset: 2px; }
+.seg button:focus-visible, .linkish:focus-visible { outline: 2px solid var(--data); outline-offset: 2px; }
+.linkish {
+  background: none; border: 0; padding: 4px 0; cursor: pointer;
+  font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-2);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--rule);
+}
+
+/* ---------- chart shell ---------- */
+.chart { position: relative; margin-top: 10px; touch-action: pan-y; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.gridline { stroke: var(--rule-soft); stroke-width: 1; }
+.axis-lab { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; fill: var(--ink-3); }
+.bar-lab { font-family: "IBM Plex Mono", monospace; font-size: 10px; fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+.bar-key { font-family: "Archivo", sans-serif; font-size: 11.5px; fill: var(--ink); }
+
+.tip {
+  position: absolute; pointer-events: none; opacity: 0; transform: translate(-50%, -100%);
+  background: var(--card); border: 1px solid var(--rule); border-radius: 9px;
+  padding: 7px 9px; box-shadow: var(--shadow); white-space: nowrap; z-index: 5;
+  transition: opacity .1s;
+}
+.tip-d { font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--ink-3); }
+.tip-v { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; margin-top: 1px; }
+.tip-s { font-size: 11.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+/* ---------- table view ---------- */
+.tablewrap { overflow-x: auto; margin-top: 10px; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--rule-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+th { font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+th:first-child, td:first-child { text-align: left; }
+[hidden] { display: none !important; }
+
+/* ---------- run strip ---------- */
+.runs { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 12px; }
+.run { width: 100%; max-width: 16px; aspect-ratio: 1/1.7; border-radius: 3px; flex: 1 1 11px; }
+.run-ok { background: color-mix(in srgb, var(--good) 55%, transparent); }
+.run-ko { background: var(--crit); }
+
+/* ---------- legend ---------- */
+.legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); }
+.legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.subhead { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin: 22px 0 0; padding-top: 16px; border-top: 1px solid var(--rule-soft); }
+
+.caveat { color: var(--ink-3); font-size: 11.5px; line-height: 1.55; margin: 10px 0 0; padding: 9px 11px; background: var(--card-sunk); border: 1px solid var(--rule-soft); border-radius: 9px; }
+.caveat code { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; }
+
+/* ---------- feedback / comments ---------- */
+.tallies { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.tally { display: flex; align-items: center; gap: 7px; background: var(--card-sunk); border: 1px solid var(--rule); border-radius: 10px; padding: 8px 11px; }
+.tally-n { font-family: "Newsreader", Georgia, serif; font-weight: 700; font-size: 17px; font-variant-numeric: tabular-nums; }
+.tally-l { font-size: 12px; color: var(--ink-2); }
+.quote { border-left: 2px solid var(--accent); padding: 2px 0 2px 12px; margin: 12px 0 0; font-size: 13.5px; }
+.quote cite { display: block; font-style: normal; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--ink-3); margin-top: 4px; }
+
+/* ---------- footer ---------- */
+.foot { color: var(--ink-3); font-size: 12px; line-height: 1.6; padding: 4px 2px 0; }
+.foot code { font-family: "IBM Plex Mono", monospace; font-size: 11px; background: var(--card-sunk); border: 1px solid var(--rule); border-radius: 5px; padding: 1px 5px; color: var(--ink-2); }
+
+@media (min-width: 720px) {
+  .wrap { padding: 32px 24px 80px; gap: 16px; }
+  .kpis { grid-template-columns: repeat(4, 1fr); }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { padding: 20px 19px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Newsletter quotidienne · 07 h 28</div>
+    <h1>Pouls de la newsletter</h1>
+    <p class="sub" id="masthead-sub"></p>
+    <div class="seg periods" id="range-seg" role="group" aria-label="Période affichée" hidden></div>
+  </header>
+
+  <section class="banner" id="banner" aria-live="polite"></section>
+  <p class="livestamp" id="livestamp" aria-live="polite"></p>
+
+  <section class="card hero">
+    <div class="hero-top">
+      <div>
+        <div class="eyebrow">Taux d'ouverture · dernière édition</div>
+        <div class="hero-figure">
+          <span class="hero-num" id="hero-num">—</span><span class="hero-unit">%</span>
+        </div>
+      </div>
+      <div class="hero-side">
+        <div class="delta" id="hero-delta"></div>
+        <div class="eyebrow" style="margin-top:4px" id="hero-cmp">vs 30 dernières</div>
+      </div>
+    </div>
+    <div class="chart" id="spark"></div>
+    <p class="card-note" id="hero-note"></p>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Ouvertures par édition</h2>
+      <div class="seg" role="group" aria-label="Période">
+        <button type="button" data-range="30" aria-pressed="true">30</button>
+        <button type="button" data-range="60" aria-pressed="false">60</button>
+        <button type="button" data-range="0"  aria-pressed="false">Tout</button>
+      </div>
+    </div>
+    <p class="sub">Part des destinataires qui ont ouvert, édition par édition.</p>
+    <div class="chart" id="trend"></div>
+    <button type="button" class="linkish" id="trend-toggle" aria-expanded="false">Voir les chiffres</button>
+    <div class="tablewrap" id="trend-table" hidden></div>
+  </section>
+
+  <div class="cols">
+    <section class="card">
+      <div class="card-head"><h2>Clics par position</h2></div>
+      <p class="sub">Où se portent les clics selon le rang de l'article dans l'édition.</p>
+      <div class="chart" id="ranks"></div>
+      <p class="card-note" id="ranks-note"></p>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Sources les plus cliquées</h2></div>
+      <p class="sub">Domaines d'origine des articles ouverts par les lecteurs.</p>
+      <div class="chart" id="domains"></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><h2>Distribution par thème</h2></div>
+    <p class="sub" id="topics-sub"></p>
+    <div class="legend" id="topics-legend"></div>
+    <div class="donut" id="topics"></div>
+    <p class="card-note" id="topics-note"></p>
+    <p class="caveat">Le pipeline demande un thème au modèle pour chaque article mais ne l'archive pas : <code>output/newsletter/&lt;date&gt;/data.json</code> ne conserve que le rang et le titre. Ce classement est reconstitué a posteriori à partir des titres — il donne les ordres de grandeur, pas le compte exact.</p>
+    <p class="subhead">Dérive mensuelle</p>
+    <p class="sub">Part des articles publiés hors des thèmes configurés, mois par mois.</p>
+    <div class="chart" id="topics-months"></div>
+    <p class="card-note" id="topics-months-note"></p>
+  </section>
+
+  <div class="cols">
+    <section class="card">
+      <div class="card-head"><h2>Heure de lecture</h2></div>
+      <p class="sub">Ouvertures cumulées par heure, toutes éditions confondues.</p>
+      <div class="chart" id="hours"></div>
+      <p class="card-note" id="hours-note"></p>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Assiduité des lecteurs</h2></div>
+      <p class="sub">Nombre d'éditions ouvertes par chaque lecteur identifié.</p>
+      <div class="chart" id="loyalty"></div>
+      <p class="card-note" id="loyalty-note"></p>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><h2>Ce que disent les lecteurs</h2></div>
+    <p class="sub">Réactions en bas d'édition et motifs de désinscription.</p>
+    <div class="tallies" id="tallies"></div>
+    <div id="quotes"></div>
+    <div class="tablewrap" style="margin-top:14px"><table id="unsub-table"></table></div>
+  </section>
+
+  <section class="card" id="edition-card" hidden>
+    <div class="card-head"><h2 id="edition-titre">L'édition</h2><span class="eyebrow" id="edition-part"></span></div>
+    <div class="datenav" id="datenav"></div>
+    <div class="kpis" id="edition-kpis"></div>
+    <div id="edition-articles"></div>
+    <p class="card-note" id="edition-note"></p>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Fiabilité de l'envoi</h2><span class="eyebrow" id="runs-rate"></span></div>
+    <p class="sub">Déclenchements du workflow GitHub Actions, du plus ancien au plus récent.</p>
+    <div class="runs" id="runs"></div>
+    <p class="eyebrow" style="margin:18px 0 8px">Derniers départs — heure réelle</p>
+    <div class="rlist" id="runs-detail"></div>
+    <p class="card-note" id="runs-note"></p>
+  </section>
+
+  <footer class="foot" id="foot"></footer>
+</div>
+
+<script id="pulse-data" type="application/json">__DATA__</script>
+<script>
+(function () {
+  "use strict";
+  let D = JSON.parse(document.getElementById("pulse-data").textContent);
+  let ED = D.editions;
+  const $ = (id) => document.getElementById(id);
+  const MONTHS = ["janv","févr","mars","avr","mai","juin","juil","août","sept","oct","nov","déc"];
+
+  const fmtDay = (iso) => {
+    const [y, m, d] = iso.split("-").map(Number);
+    return d + " " + MONTHS[m - 1];
+  };
+  const fmtLong = (iso) => {
+    const [y, m, d] = iso.split("-").map(Number);
+    return d + " " + MONTHS[m - 1] + " " + y;
+  };
+  const rate = (e) => (e.sent ? e.opens / e.sent : 0);
+  const pct = (x) => Math.round(x * 100);
+  let REDRAW = [];
+  const svgEl = (n, a) => {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", n);
+    for (const k in a) el.setAttribute(k, a[k]);
+    return el;
+  };
+
+  // Le sélecteur n'apparaît que si les séries datées sont présentes. /board
+  // reçoit un payload sans `series` (liste blanche de public_board.py) : la
+  // page publique reste donc exactement ce qu'elle était, sans contrôle mort.
+  function renderPeriods() {
+    const seg = $("range-seg");
+    if (!D.series) return;
+    const courant = (D.range && D.range.key) || "all";
+    const choix = [["7d", "7 jours"], ["1m", "1 mois"], ["3m", "3 mois"],
+                   ["6m", "6 mois"], ["all", "Tout"]];
+    // Reconstruire l'URL plutôt que la réécrire : une chaîne de requête qui
+    // commence par « ? » remplace la précédente en entier, et le jeton part
+    // avec elle. Cliquer sur une période rendait la page inaccessible.
+    const lien = (k) => {
+      const u = new URL(window.location.href);
+      u.searchParams.set("range", k);
+      return (u.pathname + u.search).replace(/&/g, "&amp;");
+    };
+    seg.innerHTML = choix.map(([k, libelle]) =>
+      '<a href="' + lien(k) + '"' + (k === courant ? ' aria-current="true"' : "") +
+      '>' + libelle + "</a>").join("");
+    seg.hidden = false;
+  }
+
+  function renderAll() {
+    REDRAW = [];
+    ED = D.editions;
+    renderPeriods();
+
+  /* ------------------------------------------------- période sans données */
+  //
+  // Un filtre de période peut légitimement ne rien contenir : une semaine sans
+  // édition, ou sans départ, est un état réel, pas une panne. Sans cette
+  // sortie, ED[0].date et runs[runs.length-1].ok lèvent et la page s'affiche
+  // entière mais vide — coquille présente, cartes muettes, rien qui le
+  // signale au lecteur. C'est le défaut que public_board.py documente déjà
+  // pour les tableaux expurgés.
+  if (!ED.length) {
+    const depuis = D.range && D.range.start ? " depuis le " + fmtLong(D.range.start) : "";
+    $("banner").innerHTML =
+      '<span class="banner-dot" style="background:currentColor"></span>' +
+      '<div class="banner-body"><div class="banner-title">Aucune édition sur la période' +
+      '<span class="eyebrow">VIDE</span></div>' +
+      '<div class="banner-meta num">Rien à afficher' + depuis +
+      ' — élargir la période pour retrouver l\'historique.</div></div>';
+    $("masthead-sub").textContent =
+      "Aucune édition sur la période retenue. Les données existent : elles sont hors fenêtre.";
+    return;
+  }
+
+  /* ---------------------------------------------------------------- banner */
+  const runs = D.runs.slice().reverse();            // ancien -> récent
+  const lastRun = runs[runs.length - 1];
+  const lastEd = ED[ED.length - 1];
+  const okStreak = (() => { let n = 0; for (let i = runs.length - 1; i >= 0 && runs[i].ok; i--) n++; return n; })();
+
+  const banner = $("banner");
+  // Les runs viennent de l'API Actions, qui n'en renvoie qu'un nombre limité :
+  // une période ancienne peut contenir des éditions sans aucun run connu.
+  const good = lastRun ? lastRun.ok : true;
+  banner.innerHTML =
+    '<span class="banner-dot ' + (good ? "is-good" : "is-crit") + '" style="background:currentColor"></span>' +
+    '<div class="banner-body">' +
+      '<div class="banner-title">' +
+        (!lastRun ? "Édition du " + fmtLong(lastEd.date)
+                  : good ? "Édition du " + fmtLong(lastEd.date) + " partie" : "Dernier envoi en échec") +
+        '<span class="eyebrow ' + (good ? "is-good" : "is-crit") + '">' + (good ? "OK" : "ÉCHEC") + '</span>' +
+      '</div>' +
+      '<div class="banner-meta num">' +
+        lastEd.sent + " destinataires · " + lastEd.opens + " ouvertures · " + lastEd.clicks + " clics" +
+        (good && lastRun ? " · " + okStreak + " envoi" + (okStreak > 1 ? "s" : "") + " d'affilée sans échec" : "") +
+      '</div>' +
+    '</div>';
+
+  $("masthead-sub").textContent =
+    D.totals.editions + " édition" + (D.totals.editions > 1 ? "s" : "") +
+    (D.range ? " sur la période, depuis le " : " suivies depuis le ") + fmtLong(ED[0].date) +
+    ", auprès de " + D.current_sent + " abonnés actifs.";
+
+  /* ------------------------------------------------------------------ hero */
+  // Sur une période filtrée, il peut y avoir moins de 30 éditions. Annoncer
+  // « les 30 dernières » quand on en compte 7 rend le chiffre juste et
+  // l'étiquette fausse — ce qui est pire qu'une étiquette absente.
+  const last30 = ED.slice(-30);
+  const nRef = last30.length;
+  const avg30 = last30.reduce((s, e) => s + rate(e), 0) / nRef;
+  const heroRate = rate(lastEd);
+  $("hero-num").textContent = pct(heroRate);
+
+  const diff = pct(heroRate) - pct(avg30);
+  const up = diff >= 0;
+  $("hero-delta").innerHTML =
+    '<span style="color:var(--ink-2)">' + (up ? "▲" : "▼") + "</span> " +
+    (up ? "+" : "") + diff + " pts";
+  $("hero-cmp").textContent = "vs " + nRef + " dernière" + (nRef > 1 ? "s" : "");
+  $("hero-note").innerHTML =
+    "Moyenne des " + nRef + " dernière" + (nRef > 1 ? "s" : "") + " édition" +
+    (nRef > 1 ? "s" : "") + " : <strong>" + pct(avg30) + " %</strong>. " +
+    (ED.length > nRef
+      ? "Sur l'ensemble de la période, <strong>" +
+        pct(ED.reduce((s, e) => s + rate(e), 0) / ED.length) + " %</strong> en moyenne."
+      : "");
+
+  /* ------------------------------------------------------------------ kpis */
+  const kpis = [
+    [D.current_sent, "abonnés actifs"],
+    [D.unique_readers, "lecteurs identifiés"],
+    [D.totals.clicks, "clics au total"],
+    [D.totals.editions, "éditions envoyées"],
+  ];
+  $("kpis").innerHTML = kpis.map(([v, l]) =>
+    '<div class="kpi"><div class="kpi-val num">' + v + '</div><div class="kpi-lab">' + l + "</div></div>"
+  ).join("");
+
+  /* --------------------------------------------------------- line + area  */
+  function lineChart(host, data, opts) {
+    opts = opts || {};
+    const W = Math.max(260, Math.round(host.clientWidth || 340)), H = opts.height || 210;
+    const P = opts.pad || { t: 12, r: 12, b: 22, l: 30 };
+    host.textContent = "";
+    const svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img" });
+    svg.setAttribute("aria-label", opts.label || "");
+    const iw = W - P.l - P.r, ih = H - P.t - P.b;
+    const n = data.length;
+    const x = (i) => P.l + (n === 1 ? iw / 2 : (i / (n - 1)) * iw);
+    const y = (v) => P.t + ih - v * ih;
+
+    if (!opts.bare) {
+      [0, .25, .5, .75, 1].forEach((g) => {
+        svg.appendChild(svgEl("line", { class: "gridline", x1: P.l, x2: W - P.r, y1: y(g), y2: y(g) }));
+        const t = svgEl("text", { class: "axis-lab", x: P.l - 6, y: y(g) + 3.5, "text-anchor": "end" });
+        t.textContent = Math.round(g * 100);
+        svg.appendChild(t);
+      });
+    }
+
+    let dLine = "", dArea = "";
+    data.forEach((v, i) => {
+      dLine += (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1) + " ";
+    });
+    dArea = dLine + "L" + x(n - 1).toFixed(1) + " " + y(0) + " L" + x(0).toFixed(1) + " " + y(0) + " Z";
+
+    svg.appendChild(svgEl("path", { d: dArea, fill: "var(--data-soft)" }));
+    svg.appendChild(svgEl("path", {
+      d: dLine, fill: "none", stroke: "var(--data)", "stroke-width": 2,
+      "stroke-linejoin": "round", "stroke-linecap": "round",
+    }));
+
+    // point final mis en avant — anneau de surface puis pastille accent
+    const lx = x(n - 1), ly = y(data[n - 1]);
+    svg.appendChild(svgEl("circle", { cx: lx, cy: ly, r: 6, fill: "var(--card)" }));
+    svg.appendChild(svgEl("circle", { cx: lx, cy: ly, r: 4, fill: "var(--accent)" }));
+
+    if (opts.xLabels) {
+      const idx = n <= 2 ? [0, n - 1] : [0, Math.floor((n - 1) / 2), n - 1];
+      idx.forEach((i, k) => {
+        const t = svgEl("text", {
+          class: "axis-lab", x: x(i), y: H - 5,
+          "text-anchor": k === 0 ? "start" : k === idx.length - 1 ? "end" : "middle",
+        });
+        t.textContent = opts.xLabels[i];
+        svg.appendChild(t);
+      });
+    }
+
+    const cross = svgEl("line", {
+      class: "gridline", y1: P.t, y2: P.t + ih, stroke: "var(--ink-3)",
+      "stroke-dasharray": "3 3", opacity: 0,
+    });
+    const dot = svgEl("circle", { r: 4.5, fill: "var(--data)", stroke: "var(--card)", "stroke-width": 2, opacity: 0 });
+    svg.appendChild(cross); svg.appendChild(dot);
+    host.appendChild(svg);
+
+    if (!opts.tip) return;
+    const tip = document.createElement("div");
+    tip.className = "tip";
+    host.appendChild(tip);
+
+    const move = (ev) => {
+      const r = svg.getBoundingClientRect();
+      const px = ((ev.clientX - r.left) / r.width) * W;
+      let i = Math.round(((px - P.l) / iw) * (n - 1));
+      i = Math.max(0, Math.min(n - 1, i));
+      cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("opacity", .9);
+      dot.setAttribute("cx", x(i)); dot.setAttribute("cy", y(data[i])); dot.setAttribute("opacity", 1);
+      tip.innerHTML = opts.tip(i);
+      tip.style.opacity = 1;
+      tip.style.left = Math.max(58, Math.min(r.width - 58, (x(i) / W) * r.width)) + "px";
+      tip.style.top = ((y(data[i]) / H) * r.height - 10) + "px";
+    };
+    const leave = () => { tip.style.opacity = 0; cross.setAttribute("opacity", 0); dot.setAttribute("opacity", 0); };
+    svg.addEventListener("pointermove", move);
+    svg.addEventListener("pointerdown", move);
+    svg.addEventListener("pointerleave", leave);
+    svg.addEventListener("pointercancel", leave);
+  }
+
+  /* ------------------------------------------------------------- sparkline */
+  const drawSpark = () => lineChart($("spark"), last30.map(rate), { height: 74, bare: true, pad: { t: 8, r: 10, b: 8, l: 10 } });
+  REDRAW.push(drawSpark); drawSpark();
+
+  /* --------------------------------------------------------------- tendance */
+  let range = 30;
+  // Dernier départ réussi connu pour chaque date. Les runs viennent de l'API
+  // Actions, qui n'en renvoie qu'un nombre limité : une édition ancienne peut
+  // n'avoir aucun run associé, d'où le test avant affichage.
+  const departs = {};
+  (D.runs || []).forEach((r) => { if (r.ok && r.at) departs[r.date] = r.at; });
+
+  function drawTrend() {
+    const slice = range ? ED.slice(-range) : ED;
+    lineChart($("trend"), slice.map(rate), {
+      height: 230,
+      label: "Taux d'ouverture des " + slice.length + " dernières éditions",
+      xLabels: slice.map((e) => fmtDay(e.date)),
+      tip: (i) => {
+        const e = slice[i];
+        // L'heure de départ à côté du taux : l'édition du 31 août n'a fait
+        // que 21 % d'ouvertures, et c'est celle qui est partie à 21 h 15.
+        // Le lien était dans les données, nulle part dans la page.
+        const r = departs[e.date];
+        return '<div class="tip-d">' + fmtLong(e.date) + '</div>' +
+               '<div class="tip-v">' + pct(rate(e)) + " % d'ouverture</div>" +
+               '<div class="tip-s">' + e.opens + "/" + e.sent + " lecteurs · " + e.clicks + " clic" + (e.clicks > 1 ? "s" : "") +
+               (r ? " · partie à " + r : "") + "</div>";
+      },
+    });
+    const rows = slice.slice().reverse().map((e) =>
+      "<tr><td>" + fmtLong(e.date) + "</td><td>" + e.sent + "</td><td>" + e.opens +
+      "</td><td>" + pct(rate(e)) + " %</td><td>" + e.clicks + "</td></tr>").join("");
+    $("trend-table").innerHTML =
+      "<table><thead><tr><th>Édition</th><th>Envoyés</th><th>Ouvertures</th><th>Taux</th><th>Clics</th></tr></thead><tbody>" +
+      rows + "</tbody></table>";
+  }
+  REDRAW.push(drawTrend); drawTrend();
+  document.querySelectorAll("[data-range]").forEach((b) => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("[data-range]").forEach((o) => o.setAttribute("aria-pressed", "false"));
+      b.setAttribute("aria-pressed", "true");
+      range = Number(b.dataset.range);
+      drawTrend();
+    });
+  });
+  const tt = $("trend-toggle");
+  tt.addEventListener("click", () => {
+    const open = $("trend-table").hidden;
+    $("trend-table").hidden = !open;
+    tt.setAttribute("aria-expanded", String(open));
+    tt.textContent = open ? "Masquer les chiffres" : "Voir les chiffres";
+  });
+
+  /* ------------------------------------------------------ barres verticales */
+  function vBars(host, entries, opts) {
+    opts = opts || {};
+    const W = Math.max(260, Math.round(host.clientWidth || 340)), H = opts.height || 180, P = { t: 22, r: 6, b: 26, l: 6 };
+    const iw = W - P.l - P.r, ih = H - P.t - P.b;
+    const max = Math.max.apply(null, entries.map((e) => e.v)) || 1;
+    const slot = iw / entries.length, gap = Math.min(6, slot * .22), bw = slot - gap;
+    let maxLabelled = false;
+    host.textContent = "";
+    const svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img" });
+    svg.setAttribute("aria-label", opts.label || "");
+    entries.forEach((e, i) => {
+      const h = (e.v / max) * ih, bx = P.l + i * slot + gap / 2, by = P.t + ih - h;
+      svg.appendChild(svgEl("rect", {
+        x: bx.toFixed(1), y: by.toFixed(1), width: bw.toFixed(1), height: Math.max(h, e.v ? 2 : 0).toFixed(1),
+        rx: Math.min(4, bw / 2), fill: e.hi ? "var(--accent)" : "var(--data)",
+        opacity: e.dim ? .38 : 1,
+      }));
+      const isPeak = e.v === max && !maxLabelled;
+      if (isPeak) maxLabelled = true;
+      if (e.v && (opts.allLabels || isPeak)) {
+        const t = svgEl("text", { class: "bar-lab", x: bx + bw / 2, y: by - 6, "text-anchor": "middle" });
+        t.textContent = opts.fmt ? opts.fmt(e.v) : e.v;
+        svg.appendChild(t);
+      }
+      if (e.k !== undefined && (!opts.everyOther || i % 2 === 0)) {
+        const t = svgEl("text", { class: "axis-lab", x: bx + bw / 2, y: H - 8, "text-anchor": "middle" });
+        t.textContent = e.k;
+        svg.appendChild(t);
+      }
+    });
+    host.appendChild(svg);
+    if (!opts.tip) return;
+    const tip = document.createElement("div");
+    tip.className = "tip"; host.appendChild(tip);
+    const move = (ev) => {
+      const r = svg.getBoundingClientRect();
+      const px = ((ev.clientX - r.left) / r.width) * W;
+      let i = Math.floor((px - P.l) / slot);
+      i = Math.max(0, Math.min(entries.length - 1, i));
+      tip.innerHTML = opts.tip(entries[i]);
+      tip.style.opacity = 1;
+      tip.style.left = Math.max(60, Math.min(r.width - 60, ((P.l + i * slot + slot / 2) / W) * r.width)) + "px";
+      tip.style.top = (((P.t + ih - (entries[i].v / max) * ih) / H) * r.height - 8) + "px";
+    };
+    svg.addEventListener("pointermove", move);
+    svg.addEventListener("pointerdown", move);
+    svg.addEventListener("pointerleave", () => { tip.style.opacity = 0; });
+  }
+
+  /* ---------------------------------------------------- barres horizontales */
+  function hBars(host, entries, opts) {
+    opts = opts || {};
+    const rowH = 30, W = Math.max(260, Math.round(host.clientWidth || 340)), H = entries.length * rowH + 4;
+    const keyW = Math.round(W * 0.42), valW = 34;
+    const max = Math.max.apply(null, entries.map((e) => e.v)) || 1;
+    const track = W - keyW - valW;
+    host.textContent = "";
+    const svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img" });
+    svg.setAttribute("aria-label", opts.label || "");
+    entries.forEach((e, i) => {
+      const cy = i * rowH + rowH / 2;
+      const k = svgEl("text", { class: "bar-key", x: 0, y: cy + 4 });
+      k.textContent = e.k;
+      svg.appendChild(k);
+      svg.appendChild(svgEl("rect", {
+        x: keyW, y: cy - 7, width: Math.max((e.v / max) * track, 2).toFixed(1), height: 14,
+        rx: 4, fill: e.tone === "accent" ? "var(--accent)" : e.tone === "muted" ? "var(--ink-3)" : "var(--data)",
+        opacity: e.tone === "muted" ? .5 : 1,
+      }));
+      const v = svgEl("text", { class: "bar-lab", x: W, y: cy + 4, "text-anchor": "end" });
+      v.textContent = e.v;
+      svg.appendChild(v);
+    });
+    host.appendChild(svg);
+  }
+
+  /* ------------------------------------------------------- clics par rang  */
+  const rankMax = Math.max.apply(null, Object.values(D.by_rank));
+  const rankEntries = Object.keys(D.by_rank).map((k) => ({
+    k: k, v: D.by_rank[k], hi: D.by_rank[k] === rankMax,
+  }));
+  const drawRanks = () => vBars($("ranks"), rankEntries, {
+    height: 176, allLabels: true, label: "Clics par rang d'article",
+    tip: (e) => '<div class="tip-d">Article n°' + e.k + '</div><div class="tip-v">' + e.v + " clics</div>",
+  });
+  REDRAW.push(drawRanks); drawRanks();
+  const topRank = rankEntries.find((e) => e.hi);
+  const totalClicks = rankEntries.reduce((s, e) => s + e.v, 0);
+  $("ranks-note").innerHTML =
+    "La position <strong>n°" + topRank.k + "</strong> concentre le plus de clics (" +
+    Math.round((topRank.v / totalClicks) * 100) + " % du total). Les trois premiers articles pèsent <strong>" +
+    Math.round((rankEntries.slice(0, 3).reduce((s, e) => s + e.v, 0) / totalClicks) * 100) + " %</strong> des clics.";
+
+  /* --------------------------------------------------------------- domaines */
+  const doms = Object.keys(D.by_domain).slice(0, 8).map((k) => ({ k: k, v: D.by_domain[k] }));
+  const drawDoms = () => hBars($("domains"), doms, { label: "Sources les plus cliquées" });
+  REDRAW.push(drawDoms); drawDoms();
+
+  /* ------------------------------------------------------------------ thèmes */
+  const T = D.topics;
+  const CONF = new Set(T.config);
+  const topicRows = Object.keys(T.counts).map((k) => ({
+    k: k, v: T.counts[k],
+    tone: k === "indéterminé" ? "muted" : CONF.has(k) ? "data" : "accent",
+  }));
+
+  $("topics-sub").textContent =
+    T.total + " articles publiés sur " + T.editions + " éditions, classés d'après leur titre.";
+  $("topics-legend").innerHTML =
+    [["var(--data)", "Thème configuré", 1],
+     ["var(--accent)", "Hors configuration", 1],
+     ["var(--ink-3)", "Non classé", .5]]
+    .map(([c, l, o]) =>
+      '<span class="legend-item"><span class="legend-swatch" style="background:' + c +
+      ';opacity:' + o + '"></span>' + l + "</span>").join("");
+
+  // Anneau plutôt que barres : à neuf parts, l'œil compare mal 6,6 % et 7,2 %.
+  // Les pourcentages restent donc écrits dans la légende — la forme donne
+  // l'impression d'ensemble, les chiffres donnent la comparaison.
+  //
+  // La couleur porte l'information principale : configuré / hors
+  // configuration / non classé. Pour distinguer deux parts de la même
+  // famille, on fait varier l'opacité plutôt que la teinte : la famille reste
+  // lisible, ce qui est ce qu'on cherche à montrer.
+  const TON = { data: "var(--data)", accent: "var(--accent)", muted: "var(--ink-3)" };
+  const drawTopics = () => {
+    const hote = $("topics");
+    hote.innerHTML = "";
+    const total = topicRows.reduce((a, r) => a + r.v, 0) || 1;
+    const R = 62, EP = 30, C = 2 * Math.PI * R;
+    const svg = svgEl("svg", { viewBox: "0 0 170 170", role: "img",
+                               "aria-label": "Répartition des articles par thème" });
+    const g = svgEl("g", { transform: "rotate(-90 85 85)" });
+    const vus = { data: 0, accent: 0, muted: 0 };
+    let offset = 0;
+    topicRows.forEach((r) => {
+      const part = (r.v / total) * C;
+      const rang = vus[r.tone]++;
+      const arc = svgEl("circle", {
+        class: "seg", r: R, cx: 85, cy: 85, fill: "none",
+        stroke: TON[r.tone], "stroke-width": EP,
+        "stroke-opacity": Math.max(0.34, 1 - rang * 0.19).toFixed(2),
+        "stroke-dasharray": part.toFixed(2) + " " + (C - part).toFixed(2),
+        "stroke-dashoffset": (-offset).toFixed(2),
+      });
+      const t = svgEl("title", {});
+      t.textContent = r.k + " — " + r.v + " articles, " + Math.round((r.v / total) * 100) + " %";
+      arc.appendChild(t);
+      g.appendChild(arc);
+      offset += part;
+    });
+    svg.appendChild(g);
+    const n = svgEl("text", { x: 85, y: 82, "text-anchor": "middle", class: "d-tot" });
+    n.textContent = total;
+    const l = svgEl("text", { x: 85, y: 97, "text-anchor": "middle", class: "d-lbl" });
+    l.textContent = "ARTICLES";
+    svg.appendChild(n); svg.appendChild(l);
+
+    const ul = document.createElement("ul");
+    ul.className = "tlist";
+    ul.innerHTML = topicRows.map((r, i) => {
+      const rang = topicRows.slice(0, i).filter((o) => o.tone === r.tone).length;
+      const op = Math.max(0.34, 1 - rang * 0.19).toFixed(2);
+      return "<li><span class=\"sw\" style=\"background:" + TON[r.tone] + ";opacity:" + op +
+        "\"></span><span class=\"nm" + (r.tone === "data" ? " conf" : "") + "\">" + r.k +
+        "</span><span class=\"pc\">" + (r.v / total * 100).toFixed(1).replace(".", ",") +
+        " %</span><span class=\"ct\">" + r.v + "</span></li>";
+    }).join("");
+    hote.appendChild(svg); hote.appendChild(ul);
+  };
+  REDRAW.push(drawTopics); drawTopics();
+
+  const inConf = topicRows.filter((r) => r.tone === "data").reduce((s2, r) => s2 + r.v, 0);
+  const offConf = topicRows.filter((r) => r.tone === "accent").reduce((s2, r) => s2 + r.v, 0);
+  const undet = T.counts["indéterminé"] || 0;
+  const biggestOff = topicRows.find((r) => r.tone === "accent");
+  $("topics-note").innerHTML =
+    "Les cinq thèmes configurés (" + T.config.join(", ") + ") ne couvrent que <strong>" +
+    Math.round((inConf / T.total) * 100) + " %</strong> des articles publiés. <strong>" +
+    Math.round((offConf / T.total) * 100) + " %</strong> relèvent de thèmes absents de la configuration — " +
+    "le <strong>" + biggestOff.k + "</strong> à lui seul en représente " +
+    Math.round((biggestOff.v / T.total) * 100) + " %. Les " + Math.round((undet / T.total) * 100) +
+    " % restants n'ont pas pu être rattachés à un thème.";
+
+  const MN = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  const monthRows = T.monthly.map((o) => ({
+    k: MN[Number(o.m.slice(5, 7)) - 1].slice(0, 4) + ".",
+    v: Math.round((o.hors / o.tot) * 100),
+    raw: o,
+  }));
+  const peakMonth = monthRows.reduce((a, b) => (b.v > a.v ? b : a));
+  monthRows.forEach((r) => { r.hi = r === peakMonth; });
+  const drawMonths = () => vBars($("topics-months"), monthRows, {
+    height: 150, allLabels: true, fmt: (v) => v + " %",
+    label: "Part des articles hors thèmes configurés, par mois",
+    tip: (e) => '<div class="tip-v">' + e.v + " % hors config</div><div class=\"tip-s\">" +
+                e.raw.hors + " articles sur " + e.raw.tot + "</div>",
+  });
+  REDRAW.push(drawMonths); drawMonths();
+  $("topics-months-note").innerHTML =
+    "Pic en <strong>" + MN[Number(peakMonth.raw.m.slice(5, 7)) - 1] + "</strong> (" + peakMonth.v +
+    " %), au moment de la Coupe du monde : " + peakMonth.raw.sport +
+    " des " + peakMonth.raw.tot + " articles du mois portaient sur le sport.";
+
+  /* ----------------------------------------------------------------- heures */
+  // Les horodatages sont en UTC ; la période couverte est intégralement en CEST (UTC+2).
+  const parisHours = new Array(24).fill(0);
+  for (let h = 0; h < 24; h++) parisHours[(h + 2) % 24] += D.by_hour[String(h)] || 0;
+  const hourMax = Math.max.apply(null, parisHours);
+  const drawHours = () => vBars($("hours"), parisHours.map((v, h) => ({
+    k: h % 3 === 0 ? h + "h" : "", v: v, hi: v === hourMax,
+  })), {
+    height: 176, label: "Ouvertures par heure (Paris)",
+    tip: (e) => '<div class="tip-v">' + e.v + " ouvertures</div>",
+  });
+  REDRAW.push(drawHours); drawHours();
+  const peak = parisHours.indexOf(hourMax);
+  const within3 = parisHours.slice(7, 11).reduce((a, b) => a + b, 0);
+  const totalOpens = parisHours.reduce((a, b) => a + b, 0);
+  $("hours-note").innerHTML =
+    "Pic à <strong>" + peak + " h</strong>, soit environ " + (peak - 7) +
+    " h après l'envoi de 7 h 28. <strong>" + Math.round((within3 / totalOpens) * 100) +
+    " %</strong> des ouvertures ont lieu entre 7 h et 11 h.";
+
+  /* -------------------------------------------------------------- assiduité */
+  const loyal = D.loyalty;
+  const nEd = D.totals.editions || 1;
+  // Le lecteur est désigné par son rang, jamais par un identifiant : cette
+  // page est protégée par un jeton, mais l'assiduité est aussi ce qui part
+  // sur /board.
+  const drawLoyalty = () => vBars($("loyalty"), loyal.map((v, i) => ({ k: "", v: v, i: i })), {
+    height: 170, label: "Éditions ouvertes par lecteur",
+    tip: (e) => '<div class="tip-d">lecteur ' + (e.i + 1) + " sur " + loyal.length + "</div>" +
+                '<div class="tip-v">' + e.v + " édition" + (e.v > 1 ? "s" : "") + " ouverte" + (e.v > 1 ? "s" : "") + "</div>" +
+                '<div class="tip-s">' + Math.round((e.v / nEd) * 100) + " % de la période</div>",
+  });
+  REDRAW.push(drawLoyalty); drawLoyalty();
+  // Seuils proportionnels, pas absolus. Avec « 80 éditions ou plus » figé, une
+  // période de 7 jours affichait « 0 lecteurs ouvrent quasiment chaque
+  // édition (80 sur 7 ou plus). 25 n'ouvrent presque jamais » — alors que les
+  // 25 avaient tous ouvert dans la semaine. Un chiffre juste sous une phrase
+  // fausse trompe plus qu'un chiffre absent.
+  const seuilHaut = Math.max(1, Math.ceil(nEd * 0.75));
+  const seuilBas = Math.max(1, Math.ceil(nEd * 0.2));
+  const core = loyal.filter((v) => v >= seuilHaut).length;
+  const occasional = loyal.filter((v) => v < seuilBas).length;
+  $("loyalty-note").innerHTML = loyal.length
+    ? "<strong>" + core + " lecteur" + (core > 1 ? "s" : "") + "</strong> ouvre" + (core > 1 ? "nt" : "") +
+      " au moins trois éditions sur quatre (" + seuilHaut + " sur " + nEd + " ou plus). <strong>" +
+      occasional + "</strong> en ouvre" + (occasional > 1 ? "nt" : "") + " moins d'une sur cinq" +
+      (occasional ? " — ce sont eux qui tirent la moyenne vers le bas." : ".")
+    : "Aucune ouverture enregistrée sur la période.";
+
+  /* ------------------------------------------------------------- retours   */
+  const tot = ED.reduce((a, e) => ({
+    like: a.like + e.like, meh: a.meh + e.meh, dislike: a.dislike + e.dislike,
+  }), { like: 0, meh: 0, dislike: 0 });
+  const artReact = ED.reduce((s, e) => s + e.art_reactions, 0);
+  $("tallies").innerHTML =
+    [["✓", tot.like, "j'aime", "var(--good)"],
+     ["~", tot.meh, "mitigé", "var(--warn)"],
+     ["✕", tot.dislike, "je n'aime pas", "var(--crit)"],
+     ["→", artReact, "réactions article", "var(--ink-3)"]]
+    .map(([ic, n, l, c]) =>
+      '<div class="tally"><span aria-hidden="true" style="color:' + c + ';font-weight:700">' + ic + '</span>' +
+      '<span class="tally-n num">' + n + '</span><span class="tally-l">' + l + "</span></div>").join("");
+
+  const allComments = ED.flatMap((e) => e.comments.map((c) => ({ c: c, d: e.date })));
+  $("quotes").innerHTML = allComments.map((q) =>
+    '<blockquote class="quote">« ' + q.c + " »<cite>" + fmtLong(q.d) + "</cite></blockquote>").join("");
+
+  const reasonLabel = {
+    too_frequent: "Trop fréquent", too_long: "Trop long",
+    never_signed: "Jamais inscrit", other: "Autre motif",
+    not_relevant: "Pas pertinent", quality: "Qualité",
+  };
+  const rs = Object.keys(D.unsub_reasons);
+  $("unsub-table").innerHTML =
+    "<thead><tr><th>Motif de désinscription</th><th>" + D.unsub.length + " au total</th></tr></thead><tbody>" +
+    rs.map((k) => "<tr><td>" + (reasonLabel[k] || k) + "</td><td>" + D.unsub_reasons[k] + "</td></tr>").join("") +
+    "</tbody>";
+
+  /* -------------------------------------------------------------- édition  */
+  //
+  // /stats/<date> disait la même chose, dans un autre style et avec sa propre
+  // authentification. Les deux pages sont fusionnées ; /stats redirige ici.
+  function renderEdition() {
+    const E = D.edition;
+    const carte = $("edition-card");
+    if (!E) { carte.hidden = true; return; }   // /board, ou détail indisponible
+    carte.hidden = false;
+
+    const dates = ED.map((e) => e.date);
+    const idx = dates.indexOf(E.date);
+    const lien = (d) => {
+      const u = new URL(window.location.href);
+      u.pathname = "/dashboard/" + d;
+      return (u.pathname + u.search).replace(/&/g, "&amp;");
+    };
+    const fleche = (d, txt) => d
+      ? '<a href="' + lien(d) + '">' + txt + "</a>"
+      : '<span class="mute">' + txt + "</span>";
+
+    // Les 30 dernières éditions de la période, hauteur = taux d'ouverture.
+    const bande = ED.slice(-30).map((e) => {
+      const h = Math.max(6, Math.round(rate(e) * 100));
+      return '<a href="' + lien(e.date) + '" style="height:' + h + '%"' +
+             (e.date === E.date ? ' class="cur"' : "") +
+             ' title="' + fmtLong(e.date) + " — " + pct(rate(e)) + " % d'ouverture, " +
+             e.clicks + " clic" + (e.clicks > 1 ? "s" : "") + '"></a>';
+    }).join("");
+
+    $("datenav").innerHTML =
+      fleche(idx > 0 ? dates[idx - 1] : null, "‹") +
+      '<span class="cur">' + fmtLong(E.date) + "</span>" +
+      fleche(idx >= 0 && idx < dates.length - 1 ? dates[idx + 1] : null, "›") +
+      '<span class="dstrip">' + bande + "</span>";
+
+    $("edition-titre").textContent = "L'édition du " + fmtLong(E.date);
+    const part = E.sent ? Math.round((E.opens / E.sent) * 100) : 0;
+    $("edition-part").textContent = part + " % d'ouverture";
+
+    const heure = departs[E.date];
+    $("edition-kpis").innerHTML = [
+      [E.sent, "destinataires", ""],
+      [E.opens, "ouvertures", part + " %"],
+      [E.clickers, "cliqueurs", E.articles.reduce((a, x) => a + x.clicks, 0) + " clics"],
+      [heure || "—", "partie à", heure ? "" : "heure inconnue"],
+    ].map(([v, l, d]) =>
+      '<div class="kpi"><div class="kpi-val num">' + v + "</div>" +
+      '<div class="kpi-lbl">' + l + "</div>" +
+      (d ? '<div class="kpi-sub">' + d + "</div>" : "") + "</div>").join("");
+
+    // Un article sans aucun signal est grisé : c'est le tiers d'édition que
+    // personne n'atteint, et le montrer est plus utile que de le masquer.
+    $("edition-articles").innerHTML = E.articles.map((a) => {
+      const muet = !a.clicks && !a.likes && !a.mehs && !a.dislikes;
+      const sig = [];
+      if (a.clicks) sig.push(a.clicks + " clic" + (a.clicks > 1 ? "s" : ""));
+      if (a.likes) sig.push("👍 " + a.likes);
+      if (a.mehs) sig.push("😐 " + a.mehs);
+      if (a.dislikes) sig.push("👎 " + a.dislikes);
+      return '<div class="art' + (muet ? " cold" : "") + '">' +
+        '<span class="rk">#' + a.rank + "</span>" +
+        '<span class="ti">' + a.title +
+          (sig.length ? "<em>" + sig.join(" · ") + "</em>" : "<em>aucun signal</em>") +
+        "</span>" +
+        '<span class="sc">' + a.score.toFixed(1) + "</span></div>";
+    }).join("");
+
+    const g = E.global;
+    const muets = E.articles.filter((a) => !a.clicks && !a.likes && !a.mehs && !a.dislikes).length;
+    $("edition-note").innerHTML =
+      (g.like + g.meh + g.dislike
+        ? "Réaction globale : 👍 " + g.like + " · 😐 " + g.meh + " · 👎 " + g.dislike + ". "
+        : "Aucune réaction globale. ") +
+      (muets ? "<strong>" + muets + "</strong> article" + (muets > 1 ? "s" : "") +
+               " sur " + E.articles.length + " n'" + (muets > 1 ? "ont" : "a") +
+               " reçu aucun signal." : "") +
+      (E.comments.length ? " " + E.comments.length + " commentaire" +
+       (E.comments.length > 1 ? "s" : "") + "." : "");
+  }
+  renderEdition();
+
+  /* ------------------------------------------------------------ fiabilité  */
+  //
+  // La carte disait seulement réussite ou échec. Les 27, 28, 30 et 31 août, le
+  // planificateur GitHub s'est réveillé avec cinq à douze heures de retard :
+  // des envois « réussis », donc verts, mais partis le soir. La dérive était
+  // invisible ici alors que l'heure figurait déjà dans le payload.
+  //
+  // `schedule` et `workflow_dispatch` sont les deux seuls déclencheurs que
+  // l'API distingue. Une relance par le veilleur et une relance à la main
+  // arrivent toutes deux en `workflow_dispatch` : on ne peut pas les séparer,
+  // et prétendre le contraire serait inventer.
+  const DECLENCHEUR = { schedule: "cron", workflow_dispatch: "relance" };
+  const HEURE_PREVUE = 6 + 7 / 60;                 // 06:07 UTC — cf. newsletter.yml
+  const heureDe = (r) => {
+    if (!r.at) return null;
+    const [h, m] = r.at.split(":").map(Number);
+    return h + m / 60;
+  };
+
+  const fails = runs.filter((r) => !r.ok).length;
+  $("runs-rate").textContent = runs.length
+    ? Math.round(((runs.length - fails) / runs.length) * 100) + " % de réussite"
+    : "aucun déclenchement";
+  $("runs").innerHTML = runs.map((r) =>
+    '<span class="run ' + (r.ok ? "run-ok" : "run-ko") + '" title="' + fmtLong(r.date) +
+    (r.at ? " à " + r.at : "") + " — " + (r.ok ? "envoyée" : "échec") +
+    (r.event ? " (" + (DECLENCHEUR[r.event] || r.event) + ")" : "") + '"></span>').join("");
+
+  const derniers = runs.slice(-8).reverse();
+  $("runs-detail").innerHTML = derniers.map((r) => {
+    const h = heureDe(r);
+    const pos = h === null ? null : Math.max(0, Math.min(100, (h / 24) * 100));
+    const tard = h !== null && h > HEURE_PREVUE + 1;
+    const teinte = !r.ok ? "var(--crit)" : tard ? "var(--warn)" : "var(--good)";
+    return '<div class="rrow">' +
+      '<span class="rd">' + fmtDay(r.date) + "</span>" +
+      '<span class="rw">' + (DECLENCHEUR[r.event] || r.event || "—") + "</span>" +
+      '<span class="rb">' +
+        '<u style="left:' + ((HEURE_PREVUE / 24) * 100).toFixed(1) + '%"></u>' +
+        (pos === null ? "" : '<i style="left:' + pos.toFixed(1) + "%;background:" + teinte + '"></i>') +
+      "</span>" +
+      '<span class="rp" style="color:' + teinte + '">' + (r.ok ? (r.at || "—") : "échec") + "</span>" +
+      "</div>";
+  }).join("");
+  const enRetard = runs.filter((r) => r.ok && heureDe(r) !== null && heureDe(r) > HEURE_PREVUE + 1);
+  const relances = runs.filter((r) => r.event === "workflow_dispatch").length;
+  const retardNote = enRetard.length
+    ? " <strong>" + enRetard.length + " envoi" + (enRetard.length > 1 ? "s" : "") +
+      "</strong> parti" + (enRetard.length > 1 ? "s" : "") + " plus d'une heure après l'horaire prévu" +
+      (relances ? ", et " + relances + " déclenchement" + (relances > 1 ? "s" : "") +
+       " hors cron — le veilleur et une relance manuelle ne se distinguent pas ici." : ".")
+    : "";
+  const failDates = runs.filter((r) => !r.ok).map((r) => fmtDay(r.date));
+  $("runs-note").innerHTML = (runs.length ? "" : "Aucun déclenchement sur la période. ") +
+    "<strong>" + fails + " échecs</strong> sur les " + runs.length + " derniers déclenchements" +
+    (fails ? " (" + failDates.join(", ") + ")" : "") +
+    ". Chaque échec est une édition perdue : la cause récurrente est l'expiration du jeton Gmail, qui exige une ré-authentification manuelle." +
+    retardNote;
+
+  /* ---------------------------------------------------------------- footer */
+  const gd = D.generated.slice(0, 10), gt = D.generated.slice(11, 16).replace(":", " h ");
+  $("foot").innerHTML = D.live
+    ? "Les chiffres de l'édition du jour sont relus à chaque rafraîchissement (toutes les minutes). " +
+      "L'historique — éditions passées, thèmes, assiduité — est recalculé par la CI après chaque envoi, " +
+      "à partir des fichiers <code>data/*.csv</code> du dépôt."
+    : "Instantané figé au " + fmtLong(gd) + " à " + gt + ". Les chiffres proviennent des fichiers <code>data/*.csv</code> " +
+      "du dépôt et de l'historique GitHub Actions. Cette page ne se met pas à jour toute seule.";
+  }
+
+  renderAll();
+
+  /* --------------------------------------------- redessin sur redimensionnement */
+  let lastW = window.innerWidth, timer = null;
+  window.addEventListener("resize", () => {
+    if (window.innerWidth === lastW) return;   // ignore les sauts de hauteur (barre d'URL mobile)
+    lastW = window.innerWidth;
+    clearTimeout(timer);
+    timer = setTimeout(() => REDRAW.forEach((f) => f()), 140);
+  });
+  /* ------------------------------------------------------ rafraîchissement live */
+  const stampEl = $("livestamp");
+  const TOKEN = new URLSearchParams(location.search).get("token") || "";
+  const REFRESH_MS = 60000;
+  let lastSync = new Date(), failures = 0, inFlight = false;
+
+  function stamp() {
+    if (!stampEl) return;
+    if (!D.live) {
+      stampEl.innerHTML = '<span class="livedot off"></span>Instantané figé';
+      return;
+    }
+    const hh = String(lastSync.getHours()).padStart(2, "0");
+    const mm = String(lastSync.getMinutes()).padStart(2, "0");
+    stampEl.innerHTML = '<span class="livedot' + (failures ? " stale" : "") + '"></span>' +
+      (failures ? "Reconnexion… dernières données de " + hh + " h " + mm
+                : "En direct · " + hh + " h " + mm);
+  }
+
+  async function refresh() {
+    if (!D.live || inFlight || document.hidden) return;
+    inFlight = true;
+    try {
+      // La période doit accompagner la requête : sans elle, le
+      // rafraîchissement rapporte tout l'historique et défait le choix de
+      // l'utilisateur — le sélecteur reste sur « 7 jours » pendant que les
+      // chiffres reviennent à l'ensemble.
+      //
+      // Le jeton n'est transmis que s'il est encore dans l'URL. Une fois la
+      // session posée en cookie, il n'y est plus et le navigateur s'en charge.
+      const q = new URLSearchParams();
+      if (TOKEN) q.set("token", TOKEN);
+      if (D.range && D.range.key) q.set("range", D.range.key);
+      const suffixe = q.toString() ? "?" + q.toString() : "";
+      const resp = await fetch("/dashboard/data" + suffixe, { cache: "no-store" });
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+      D = await resp.json();
+      renderAll();
+      lastSync = new Date();
+      failures = 0;
+    } catch (err) {
+      failures++;
+    } finally {
+      inFlight = false;
+      stamp();
+    }
+  }
+
+  stamp();
+  setInterval(refresh, REFRESH_MS);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+})();
+</script>
+
+</body>
+</html>

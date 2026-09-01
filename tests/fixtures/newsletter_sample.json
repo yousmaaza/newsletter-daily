@@ -1,0 +1,153 @@
+{
+  "subject": "🗞️ Édition de référence — validation du rendu",
+  "newsletter_title": "Édition de référence",
+  "intro": "Cette édition sert à valider le rendu de la newsletter sans lancer la génération. Son contenu est figé et purement illustratif.",
+  "conclusion": "Dans un monde en ébullition — entre bras de fer géopolitique, révolution technologique et dérèglements climatiques — rester informé, c'est déjà agir. À demain pour un nouveau brief !",
+  "articles": [
+    {
+      "rank": 1,
+      "title": "Washington lance la guerre économique totale contre Téhéran",
+      "flash": "Les États-Unis déploient une stratégie d'«asphyxie économique» contre l'Iran et menacent ouvertement les alliés de Téhéran de représailles commerciales.",
+      "detail": "L'administration Trump franchit un cap en visant non seulement l'Iran mais aussi ses partenaires commerciaux, dans ce qui ressemble à un «D-Day économique» inédit. La stratégie s'appuie sur des sanctions secondaires ciblant tout pays maintenant des échanges avec Téhéran, forçant alliés européens et puissances asiatiques à choisir leur camp. Téhéran dit balayer la menace, mais la pression sur les marchés pétroliers et financiers mondiaux est déjà palpable.",
+      "topic": "monde",
+      "hype": "viral",
+      "sources": [
+        {
+          "title": "Les Etats-Unis visent \"l'asphyxie économique\" de l'Iran et menacent les alliés de Téhéran",
+          "url": "https://boursedirect.fr/fr/actualites/categorie/economie/l-iran-balaie-la-menace-americaine-d-un-d-day-economique-afp-27debc32958791eda979815c0f95505beadb4887",
+          "source": "boursedirect.fr"
+        },
+        {
+          "title": "Le S&P 500 et le Nasdaq terminent en baisse, plombés par la technologie et les tensions avec l'Iran",
+          "url": "https://zonebourse.com/actualite-bourse/le-s-p-500-et-le-nasdaq-terminent-en-baisse-plombes-par-la-technologie-et-les-tensions-avec-l-iran-ce7858dbdf80ff21",
+          "source": "zonebourse.com"
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Le Trésor américain se dote d'un groupe de travail quantique",
+      "flash": "Washington crée une task force dédiée à l'informatique quantique au sein du Trésor américain, signal fort de la course aux armements technologiques.",
+      "detail": "L'initiative du Trésor américain marque une étape décisive dans la prise en compte institutionnelle du risque quantique : les ordinateurs quantiques pourraient, à terme, casser les systèmes de cryptographie qui sécurisent les marchés financiers mondiaux. Ce groupe de travail aura pour mission d'anticiper les menaces et d'élaborer des standards de cybersécurité post-quantique. Une course contre la montre face aux avancées chinoises dans ce domaine.",
+      "topic": "technologie",
+      "hype": "trending",
+      "sources": [
+        {
+          "title": "Le Trésor américain crée un groupe de travail sur l'informatique quantique",
+          "url": "https://fr.investing.com/news/economy-news/le-tresor-americain-cree-un-groupe-de-travail-sur-linformatique-quantique-93CH-3570100",
+          "source": "fr.investing.com"
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Téléphones bannis des lycées dès la rentrée de septembre",
+      "flash": "Macron promulgue la loi interdisant les smartphones dans les lycées français dès septembre 2026, étendant la mesure déjà en vigueur dans les collèges.",
+      "detail": "Après les collèges, c'est au tour des lycéens de ranger leur téléphone à l'entrée des établissements. Le président de la République a tranché malgré la censure partielle du Conseil constitutionnel sur une autre disposition du texte. L'objectif affiché : améliorer la concentration, réduire le cyberharcèlement et renouer avec un climat scolaire apaisé. La mesure fait débat entre partisans de la «détox numérique» et défenseurs de l'accès à l'information pour les élèves.",
+      "topic": "monde",
+      "hype": "trending",
+      "sources": [
+        {
+          "title": "Rentrée 2026 : Vers une interdiction des téléphones dans les lycées dès septembre",
+          "url": "https://www.20minutes.fr/societe/4240598-20260824-rentree-2026-vers-interdiction-telephones-lycees-septembre",
+          "source": "20minutes.fr"
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Tornade dans l'Aude : 41 blessés, 300 maisons dévastées",
+      "flash": "Une impressionnante tornade a ravagé lundi le village de Pomas dans l'Aude, faisant au moins 41 blessés et endommageant 300 habitations.",
+      "detail": "Le phénomène météorologique extrême s'est abattu à 17h20 sur Pomas, commune proche de Carcassonne, alors que l'Aude était déjà placée en vigilance orange pour les orages. Les images montrent des toitures arrachées, des véhicules retournés et des arbres déracinés sur plusieurs centaines de mètres. Les secours ont déployé d'importants moyens humains et matériels. Cet événement ravive les questions sur la multiplication des phénomènes météorologiques violents en France.",
+      "topic": "santé",
+      "hype": "viral",
+      "sources": [
+        {
+          "title": "Au moins 41 blessés, 300 habitations touchées : ce que l'on sait de l'impressionnante tornade qui a ravagé le village de Pomas dans l'Aude",
+          "url": "https://lefigaro.fr/meteo/aude-les-images-impressionnantes-d-une-tornade-pres-de-carcassonne-20260824",
+          "source": "lefigaro.fr"
+        },
+        {
+          "title": "Les trois infos à retenir ce lundi 24 août",
+          "url": "https://actu.orange.fr/france/les-trois-infos-a-retenir-ce-lundi-24-aout-magic-CNT000002ruO9p.html",
+          "source": "actu.orange.fr"
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Canada à Trump : le monde dit «non» et inspire",
+      "flash": "En refusant de céder aux pressions de Washington, le Canada s'impose comme un symbole mondial de résistance face à l'unilatéralisme américain.",
+      "detail": "L'émission «Interception» de France Inter consacre son édition de ce mardi à l'exemple canadien : Ottawa a tenu bon face aux injonctions économiques et diplomatiques de l'administration Trump, inspirant d'autres nations à adopter une posture similaire. Ce bras de fer redessine les contours d'un ordre mondial multipolaire où l'Europe, l'Asie et les Amériques cherchent à affirmer leur souveraineté face aux États-Unis. Un signal fort à l'heure où la pression américaine sur l'Iran crée de nouveaux alignements géopolitiques.",
+      "topic": "monde",
+      "hype": "trending",
+      "sources": [
+        {
+          "title": "Interception du mardi 25 août 2026 — En disant «non» à Trump, le Canada donne un exemple au reste du monde",
+          "url": "https://radiofrance.fr/franceinter/podcasts/interception/interception-du-mardi-25-aout-2026-8309054",
+          "source": "radiofrance.fr"
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "title": "Société Générale rachète massivement ses propres actions",
+      "flash": "La Société Générale a déjà réalisé 32,5% de son programme de rachat d'actions d'1,5 milliard d'euros, un signal de confiance fort envoyé aux marchés.",
+      "detail": "Entre le 17 et le 21 août 2026, la banque française a poursuivi à rythme soutenu son programme de buyback, l'un des plus importants du secteur bancaire européen cette année. Ce type d'opération, qui réduit le nombre d'actions en circulation, est interprété comme un signal que la direction juge le titre sous-évalué et dispose d'une solide génération de cash. Dans un contexte boursier sous tension, la démarche vise aussi à rassurer les actionnaires institutionnels.",
+      "topic": "business",
+      "hype": "notable",
+      "sources": [
+        {
+          "title": "SOCIETE GENERALE (EPA:GLE) | Information sur les opérations effectuées dans le cadre d'un programme de rachat d'actions",
+          "url": "https://lesechos-comfi.lesechos.fr/press-release/societe-generale-epa-gle-societe-generale-information-sur-les-operations-effectuees-dans-le-cadre-dun-programme-de-rachat-dactions-AR8cpnDCxvF",
+          "source": "lesechos-comfi.lesechos.fr"
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "title": "QIAGEN nomme un nouveau PDG aux 25 ans d'expérience",
+      "flash": "Le spécialiste des sciences du vivant QIAGEN nomme Jonathan M. Pratt à sa tête, un vétéran de 25 ans dans le secteur de la santé et des biotechs internationales.",
+      "detail": "Cette nomination au sommet du groupe néerlando-allemand, coté à Francfort, intervient dans un secteur de la santé en pleine mutation post-pandémique. Jonathan M. Pratt apporte un profil résolument international, ce que QIAGEN — acteur majeur du diagnostic moléculaire — recherche pour accélérer son expansion sur les marchés émergents et renforcer sa compétitivité face aux géants américains du secteur. Un pari sur l'expertise opérationnelle dans un environnement réglementaire de plus en plus complexe.",
+      "topic": "business",
+      "hype": "notable",
+      "sources": [
+        {
+          "title": "QIAGEN N.V. (ETR:QIA) — QIAGEN appoints Jonathan M. Pratt as Chief Executive Officer",
+          "url": "https://lesechos-comfi.lesechos.fr/press-release/qiagen-nv-etr-qia-eqs-adhoc-qiagen-nv-qiagen-appoints-jonathan-m-pratt-as-chief-executive-officer-VrlaSHDGF3d",
+          "source": "lesechos-comfi.lesechos.fr"
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "title": "Séoul ouvre ses portes aux étudiants STEM étrangers",
+      "flash": "L'Université Sogang à Séoul lance un programme de bourses intégrales pour des étudiants internationaux en sciences et ingénierie, soutenu par l'État coréen.",
+      "detail": "Adossé au projet ANCHOR de la ville de Séoul, ce dispositif efface 100% des frais de scolarité pour des étudiants sélectionnés en master et doctorat dans les filières scientifiques et technologiques. La Corée du Sud confirme ainsi sa stratégie offensive pour attirer les cerveaux mondiaux dans un contexte de guerre des talents qui s'intensifie entre grandes puissances technologiques. Une réponse directe aux politiques similaires menées par les États-Unis, l'Europe et la Chine.",
+      "topic": "science",
+      "hype": "notable",
+      "sources": [
+        {
+          "title": "Sogang University opens a full tuition path for international STEM graduate students in Seoul",
+          "url": "https://lesechos-comfi.lesechos.fr/press-release/sogang-university-etr-sogang-university-opens-a-full-tuition-path-for-international-stem-graduate-students-in-seoul-o3thZHN9nfg",
+          "source": "lesechos-comfi.lesechos.fr"
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "title": "Vendanges 2026 : la sécheresse frappe jusqu'au voltis",
+      "flash": "Même le voltis, cépage résistant en expérimentation en Champagne, subit les effets du manque d'eau : des grappes volumineuses mais bien plus légères que l'an dernier.",
+      "detail": "À Rilly-la-Montagne, les viticulteurs champenois constatent que même les nouvelles variétés développées pour leur robustesse climatique n'échappent pas à la sécheresse de l'été 2026. Le voltis, cépage hybride tolérant, affiche des grappes généreuses en taille mais dont le poids, et donc le rendement, déçoit. Cette observation alimente le débat sur l'adaptation des filières viticoles françaises au changement climatique et la pertinence d'accélérer les transitions variétales.",
+      "topic": "science",
+      "hype": "notable",
+      "sources": [
+        {
+          "title": "Vendanges 2026 : à Rilly-la-Montagne, le voltis a aussi souffert de la sécheresse",
+          "url": "https://lunion.fr/id824032/article/2026-08-25/video-vendanges-2026-rilly-la-montagne-le-voltis-aussi-souffert-de-la-secheresse",
+          "source": "lunion.fr"
+        }
+      ]
+    }
+  ]
+}
